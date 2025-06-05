@@ -19,6 +19,7 @@ export interface Register {
   email: string;
   password: string;
   confirmPassword: string;
+  type: string;
 }
 
 export interface Users {

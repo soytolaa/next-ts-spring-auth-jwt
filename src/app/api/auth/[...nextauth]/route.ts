@@ -1,12 +1,42 @@
 // app/api/auth/[...nextauth]/route.ts
 
-import { loginAction } from "@/action/authAction";
+import { loginAction, registerAction } from "@/action/authAction";
+import { getUserDetailService } from "@/service/authService";
 import { Users } from "@/types/auth";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: AuthOptions = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
+      allowDangerousEmailAccountLinking: true,
+      async profile(profile, account) {
+        console.log("@@@Profile@@@", profile);
+        const user = await registerAction({
+          email: profile.email,
+          password: profile.sub || "123456",
+          userName: profile.name,
+          confirmPassword: profile.sub || "",
+          type: "google" as string,
+        });
+        return {
+          id: user.payload.userId.toString(),
+          email: user.payload.email,
+          name: user.payload.userName,
+          accessToken: account?.id_token || "",
+        };
+      },
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -47,7 +77,11 @@ export const authOptions: AuthOptions = {
     maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      if (account) {
+        token.email = user.email;
+        token.accessToken = (account as any).id_token;
+      }
       if (user) {
         token.email = user.email;
         token.accessToken = (user as any).accessToken;

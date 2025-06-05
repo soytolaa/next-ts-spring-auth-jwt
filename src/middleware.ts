@@ -10,11 +10,10 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
       accessToken?: string;
     };
   };
-  console.log("@@@Session@@@",session)
   if (!session?.user?.accessToken) {
     return NextResponse.redirect(new URL("/login", request.url).toString());
   }
   return NextResponse.next();
 }
 
-export const config = { matcher: ["/dashboard/admin/:path*"] };
+export const config = { matcher: ["/dashboard/:path*"] };

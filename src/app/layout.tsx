@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={`${plsJakartaSans.className} antialiased`}>
         <NextTopLoader color="#000000" height={3} showSpinner={false} />
         {children}
-        <Toaster position="top-right" />
+        <Toaster position="top-center" />
       </body>
     </html>
   );

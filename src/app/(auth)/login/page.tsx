@@ -37,20 +37,25 @@ export default function LoginPage() {
       setIsLoading(true);
 
       const res = await signIn("credentials", {
-        redirect: false,
-        ...validatedData,
+        // login with credentials
+        redirect: false, // prevent redirect to /admin it will wait for the response
+        ...validatedData, // validated data
       });
 
       if (!res) {
+        // if response is not ok then show error
         toast.error("No response from server");
         return;
       }
       if (res.ok) {
+        // if response is ok then login successfully
         toast.success("Login successfully!");
         router.push("/admin");
         setIsLoading(false);
       } else {
-        switch (res.error) {
+        switch (
+          res.error // if response is not ok then show error
+        ) {
           case "Invalid password!":
             toast.error("Invalid password!");
             setIsLoading(false);
@@ -73,6 +78,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
+        // if error is zod error then show error
         const fieldErrors: Partial<LoginFormData> = {};
         error.errors.forEach((err) => {
           if (err.path[0]) {
@@ -109,10 +115,9 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center">
-              <ShoppingBag className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900">StreamLine</span>
+            <span className="text-2xl font-bold text-gray-900">
+              Cocoon Team
+            </span>
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
           <p className="text-sm text-gray-600 mt-2">

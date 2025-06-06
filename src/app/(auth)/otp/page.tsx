@@ -134,10 +134,9 @@ export default function OtpPage() {
       <Card className="w-full max-w-md border border-gray-100 shadow-xl">
         <CardHeader className="space-y-4 text-center pb-6">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center">
-              <ShoppingBag className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900">StreamLine</span>
+            <span className="text-2xl font-bold text-gray-900">
+              Coocon Team
+            </span>
           </div>
 
           <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">

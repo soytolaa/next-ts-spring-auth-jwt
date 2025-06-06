@@ -1,7 +1,6 @@
 // app/api/auth/[...nextauth]/route.ts
 
 import { loginAction, registerAction } from "@/action/authAction";
-import { getUserDetailService } from "@/service/authService";
 import { Users } from "@/types/auth";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";

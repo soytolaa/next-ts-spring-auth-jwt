@@ -8,7 +8,6 @@ declare module "next-auth" {
       accessToken: string;
     };
   }
-
   interface User {
     email: string;
     accessToken: string;

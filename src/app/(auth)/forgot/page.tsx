@@ -21,6 +21,7 @@ import { z } from "zod";
 
 const resetPasswordSchema = z
   .object({
+    email: z.string().email("Invalid email address"),
     newPassword: z.string().min(8, "Password must be at least 8 characters"),
     confirmNewPassword: z
       .string()
@@ -55,7 +56,7 @@ const ForgotPasswordPage = () => {
 
     try {
       const validatedData = resetPasswordSchema.parse({
-        resetPasswordData,
+        ...resetPasswordData,
       });
 
       setIsLoading(true);
@@ -103,10 +104,9 @@ const ForgotPasswordPage = () => {
       <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center">
-              <ShoppingBag className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900">StreamLine</span>
+            <span className="text-2xl font-bold text-gray-900">
+              Coocon Team
+            </span>
           </div>
 
           <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">

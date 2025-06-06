@@ -11,7 +11,9 @@ const DashboardPage = async () => {
   }
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1 className="text-5xl font-bold text-center mt-[20%]">
+        Welcome to Cocoon Team
+      </h1>
     </div>
   );
 };

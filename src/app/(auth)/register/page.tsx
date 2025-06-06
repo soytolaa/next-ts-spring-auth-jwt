@@ -8,7 +8,7 @@ import Link from "next/link";
 import { registerAction } from "@/action/authAction";
 import { z } from "zod";
 import type { Register } from "@/types/auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 
@@ -20,6 +20,7 @@ const registerSchema = z
     confirmPassword: z
       .string()
       .min(8, "Password must be at least 8 characters"),
+    type: z.string().min(1, "Type is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -50,7 +51,6 @@ export default function RegisterPage() {
     try {
       const validatedData = registerSchema.parse(registerData);
       setIsLoading(true);
-
       const res = await registerAction({
         ...(validatedData as Register),
       });

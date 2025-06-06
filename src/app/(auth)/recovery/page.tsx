@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { recoveryAccountAction } from "@/action/authAction";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { ShoppingBag, Mail, ArrowLeft } from "lucide-react";

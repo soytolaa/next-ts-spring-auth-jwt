@@ -5,12 +5,11 @@ import {
   resendOtpService,
   changePasswordService,
   verifyOtpService,
-  getUserByEmailService,
   resetPasswordService,
   getUserDetailService,
   recoveryAccountService,
 } from "@/service/authService";
-import { Login, Register, ResetPassword } from "@/types/auth";
+import { Login, Register, ForgotPassword } from "@/types/auth";
 
 export const loginAction = async (loginData: Login) => {
   const response = await loginService(loginData);
@@ -50,7 +49,7 @@ export const getUserDetailAction = async (email: string) => {
   return response;
 };
 
-export const resetPasswordAction = async (data: ResetPassword) => {
+export const resetPasswordAction = async (data: ForgotPassword) => {
   const response = await resetPasswordService(data);
   console.log("response###ACTION", response);
   return response;

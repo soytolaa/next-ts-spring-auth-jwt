@@ -82,11 +82,18 @@ export default function RegisterPage() {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signIn("google", {
-        callbackUrl: "/login",
+      const res = await signIn("google", {
+        callbackUrl: "/admin",
+        redirect: false,
       });
+      if (res?.ok) {
+        toast.success("Login successfully!");
+        router.push("/admin");
+        setIsLoading(false);
+      }
     } catch (error) {
-      console.error("Error signing in with Google:", error);
+      toast.error("Failed to sign in with Google");
+      setIsLoading(false);
     }
   };
 

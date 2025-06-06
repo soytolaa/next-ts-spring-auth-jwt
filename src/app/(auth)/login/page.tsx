@@ -84,22 +84,23 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   }
-
+  // google sign in
   const handleGoogleSignIn = async () => {
     try {
       const res = await signIn("google", {
-        callbackUrl: "/admin",
-        redirect: false,
+        callbackUrl: "/admin", // after login redirect to admin page
+        redirect: false, // prevent redirect to /admin it will wait for the response
       });
-
-      if (res?.error) {
-        toast.error("Failed to sign in with Google");
-      } else if (res?.url) {
-        router.push(res.url);
+      if (res?.ok) {
+        // if response is ok then login successfully
+        toast.success("Login successfully!");
+        router.push("/admin");
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error signing in with Google:", error);
+      // if response is not ok then show error
       toast.error("Failed to sign in with Google");
+      setIsLoading(false);
     }
   };
 

@@ -5,6 +5,7 @@ import { Users } from "@/types/auth";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import GithubProvider from "next-auth/providers/github";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -85,6 +86,40 @@ export const authOptions: AuthOptions = {
           throw new Error(
             error instanceof Error ? error.message : "Authentication failed"
           );
+        }
+      },
+    }),
+    // github provider
+    GithubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!, // github client id
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!, // github client secret
+      allowDangerousEmailAccountLinking: true, // allow user to link their email account to github account
+      async profile(profile, account) {
+        console.log("$$Profile", profile);
+        console.log("$$Account", account);
+        // profile function to get user profile
+        //profile function is called when user sign in with github
+        //account is the account object
+        try {
+          const user = await registerAction({
+            email: profile.email,
+            password: profile.id || "",
+            userName: profile.name,
+            confirmPassword: profile.id || "",
+            type: "github" as string,
+          });
+          if (user.errorMessage) {
+            throw new Error(user.errorMessage);
+          }
+          return {
+            id: user.payload.userId.toString(),
+            email: user.payload.email,
+            name: user.payload.userName,
+            accessToken: account.access_token || "",
+          };
+        } catch (error) {
+          console.error("Github auth error:", error);
+          throw error;
         }
       },
     }),

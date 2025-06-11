@@ -53,7 +53,6 @@ const ForgotPasswordPage = () => {
       newPassword: formData.get("newPassword") as string,
       confirmNewPassword: formData.get("confirmNewPassword") as string,
     };
-
     try {
       const validatedData = resetPasswordSchema.parse({
         ...resetPasswordData,

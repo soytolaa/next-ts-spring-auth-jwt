@@ -19,7 +19,7 @@ export interface Register {
   email: string;
   password: string;
   confirmPassword: string;
-  type: string;
+  type: Type;
 }
 
 export interface Users {
@@ -32,4 +32,10 @@ export interface ForgotPassword {
   email: string;
   newPassword: string;
   confirmNewPassword: string;
+}
+
+export enum Type {
+  credentials = "CREDENTIALS",
+  github = "GITHUB",
+  google = "GOOGLE",
 }

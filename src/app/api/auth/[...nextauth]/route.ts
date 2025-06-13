@@ -6,7 +6,7 @@ import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
-
+import { Type } from "@/types/auth";
 export const authOptions: AuthOptions = {
   providers: [
     // google provider
@@ -30,10 +30,10 @@ export const authOptions: AuthOptions = {
         try {
           const user = await registerAction({
             email: profile.email,
-            password: profile.sub || "123456",
+            password: `${"coocon"}${profile.sub}`,
             userName: profile.name,
-            confirmPassword: profile.sub || "",
-            type: "google" as string,
+            confirmPassword: `${"coocon"}${profile.sub}`,
+            type: Type.google,
           });
           if (user.errorMessage) {
             throw new Error(user.errorMessage);
@@ -103,10 +103,10 @@ export const authOptions: AuthOptions = {
         try {
           const user = await registerAction({
             email: profile.email,
-            password: profile.id || "",
+            password: `${"coocon"}${profile.id}`,
             userName: profile.name,
-            confirmPassword: profile.id || "",
-            type: "github" as string,
+            confirmPassword: `${"coocon"}${profile.id}`,
+            type: Type.github,
           });
           if (user.errorMessage) {
             throw new Error(user.errorMessage);

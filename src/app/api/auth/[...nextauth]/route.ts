@@ -97,7 +97,7 @@ export const authOptions: AuthOptions = {
       async profile(profile, account) {
         console.log("$$Profile", profile);
         console.log("$$Account", account);
-        // profile function to get user profile
+        //profile function to get user profile
         //profile function is called when user sign in with github
         //account is the account object
         try {

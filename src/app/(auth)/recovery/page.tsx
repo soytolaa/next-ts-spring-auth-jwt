@@ -69,7 +69,7 @@ const RecoveryPage = () => {
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <span className="text-2xl font-bold text-gray-900">
-              Coocon Team
+              Bean Team
             </span>
           </div>
 

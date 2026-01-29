@@ -132,12 +132,12 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
         <div className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <span className="text-2xl font-bold text-gray-900">
-              Cocoon Team
-            </span>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900">Welcome back</h2>
+            {/* <div className="flex items-center justify-center space-x-2 mb-4">
+              <span className="text-2xl font-bold text-gray-900">
+                Bean Team
+              </span>
+            </div> */}
+          <h2 className="text-2xl font-bold text-gray-900">Sign In to your account</h2>
           <p className="text-sm text-gray-600 mt-2">
             Enter your credentials to access your account
           </p>
@@ -147,7 +147,7 @@ export default function LoginPage() {
           <div className="space-y-5">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-gray-700">
-                Email address
+                Email
               </Label>
               <Input
                 id="email"

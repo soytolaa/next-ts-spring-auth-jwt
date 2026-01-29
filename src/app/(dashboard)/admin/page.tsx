@@ -12,7 +12,7 @@ const DashboardPage = async () => {
   return (
     <div>
       <h1 className="text-5xl font-bold text-center mt-[20%]">
-        Welcome to Coocon Team {session?.user?.email}
+        Welcome to Bean Team {session?.user?.email}
       </h1>
     </div>
   );

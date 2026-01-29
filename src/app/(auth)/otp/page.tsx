@@ -135,7 +135,7 @@ export default function OtpPage() {
         <CardHeader className="space-y-4 text-center pb-6">
           <div className="flex items-center justify-center space-x-2 mb-4">
             <span className="text-2xl font-bold text-gray-900">
-              Coocon Team
+              Bean Team
             </span>
           </div>
 
@@ -160,7 +160,7 @@ export default function OtpPage() {
         </CardHeader>
 
         <CardContent className="space-y-6 pt-0">
-          <div className="flex justify-center">
+          <div className="flex justify-center"> 
             <InputOTP
               maxLength={6}
               value={otpCode?.toString()}

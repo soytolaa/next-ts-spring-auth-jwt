@@ -125,16 +125,16 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
         <div className="text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
+          {/* <div className="flex items-center justify-center space-x-2 mb-4">
             <span className="text-2xl font-bold text-gray-900">
-              Coocon Team
+              Bean Team
             </span>
-          </div>
+          </div> */}
           <h2 className="text-2xl font-bold text-gray-900">
             Create your account
           </h2>
           <p className="text-sm text-gray-600 mt-2">
-            Join StreamLine and start shopping today
+            Manage your tasks and projects easily and efficiently
           </p>
         </div>
 
@@ -148,6 +148,7 @@ export default function RegisterPage() {
                 id="userName"
                 name="userName"
                 type="text"
+                autoComplete="off"
                 placeholder="Enter your full name"
                 className={`${
                   errors.userName ? "border-red-500" : "border-gray-300"
@@ -160,12 +161,13 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-gray-700">
-                Email address
+                Email
               </Label>
               <Input
                 id="email"
                 name="email"
                 placeholder="name@example.com"
+                autoComplete="off"
                 className={`${
                   errors.email ? "border-red-500" : "border-gray-300"
                 } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50`}

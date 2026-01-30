@@ -13,7 +13,16 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   if (!session?.user?.accessToken) {
     return NextResponse.redirect(new URL("/login", request.url).toString());
   }
-  return NextResponse.next();
+  
+  // Add pathname to headers for server components
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+  
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }
 
 export const config = { matcher: ["/(dashboard)/:path*"] };

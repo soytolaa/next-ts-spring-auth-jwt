@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, LogOutIcon, Menu, Search, Settings } from "lucide-react"
+
 
 import {
   Sidebar,
@@ -7,35 +7,33 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar"
-
+import { SidebarNavItem } from "@/components/sidebar-nav-item"
 // Menu items.
 const items = [
   {
     id: 1,
     title: "Dashboard",
     url: "/d", 
-    icon: Home,
+    icon: "Home",
   },
   {
     id: 2,
     title: "Project",
     url: "/p",
-    icon: Inbox,
+    icon: "Inbox",
   },
   {
     id: 3,
     title: "Task",
     url: "/t",
-    icon: Calendar,
+    icon: "Calendar",
   },
   {
     id: 4,
     title: "User",
     url: "/u",
-    icon: Search, 
+    icon: "Search", 
   }
 ]
 
@@ -44,13 +42,13 @@ const general = [
     id: 1,
     title: "Settings",
     url: "/settings",
-    icon: Settings,
+    icon: "Settings",
   },
   {
     id: 2,
     title: "Logout",
     url: "/logout",
-    icon: LogOutIcon,
+    icon: "LogOutIcon",
   },
 ]
 
@@ -64,14 +62,12 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarNavItem
+                  key={item.id}
+                  url={item.url}
+                  title={item.title}
+                  icon={item.icon}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -79,14 +75,12 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {general.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarNavItem
+                  key={item.id}
+                  url={item.url}
+                  title={item.title}
+                  icon={item.icon}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>

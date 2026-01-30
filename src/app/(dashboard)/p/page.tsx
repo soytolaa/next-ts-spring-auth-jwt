@@ -1,6 +1,6 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Box, Calendar, FileText, Plus, Users2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Box, Calendar, FileText, Users2 } from "lucide-react";
+import ButtonCreate from "./(_components)/button-create";
 const projects = [
   {
     id: 1,
@@ -112,10 +112,7 @@ export default function ProjectPage() {
     <div>
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-bold">My Projects</h1>
-        <Button>
-          <Plus />
-          New Project
-        </Button>
+        <ButtonCreate />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {projects.map((project) => (

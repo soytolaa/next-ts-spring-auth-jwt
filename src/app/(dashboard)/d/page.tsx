@@ -1,5 +1,6 @@
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Box, Calendar, FileText, Users2 } from "lucide-react";
+import { ChartBar } from "@/components/chart-bart";
 const cards = [
   {
     id: 1,
@@ -60,6 +61,12 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+      {/* Create Chart Analyse Project and Task */}
+      <div className="w-full h-full rounded-lg p-4">
+        <h2 className="text-xl font-bold">Project And Task Analysis</h2>
+        <ChartBar />
+      </div>
+
     </div>
   );
 }

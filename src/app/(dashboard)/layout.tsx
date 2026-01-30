@@ -32,8 +32,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </div>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 scrollbar-hide">
-          {children}
+        <main className="flex-1 overflow-y-auto p-4 scrollbar-hide scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="flex flex-col gap-4">
+            {children}
+          </div>
         </main>
       </SidebarInset>
     </SidebarProvider>

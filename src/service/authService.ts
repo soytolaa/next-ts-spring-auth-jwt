@@ -3,7 +3,7 @@ import { ForgotPassword, Login, Register } from "@/types/auth";
 
 export async function loginService(data: Login) {
   const { headers } = await headerToken(false);
-  const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+  const response = await fetch(`${process.env.API_URL}/auth/login`, {
     method: "POST",
     headers: headers,
     body: JSON.stringify({ ...data }),

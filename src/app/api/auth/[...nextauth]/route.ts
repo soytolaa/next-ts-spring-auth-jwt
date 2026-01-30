@@ -7,6 +7,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import { Type } from "@/types/auth";
+import { User } from "next-auth";
 export const authOptions: AuthOptions = {
   providers: [
     // google provider
@@ -23,7 +24,7 @@ export const authOptions: AuthOptions = {
         },
       },
       allowDangerousEmailAccountLinking: true, // allow user to link their email account to google account
-      async profile(profile, account) {
+      async profile(profile, account): Promise<User> {
         // profile function to get user profile
         //profile function is called when user sign in with google
         //account is the account object
@@ -168,8 +169,8 @@ export const authOptions: AuthOptions = {
     signIn: "/login", // sign in page
     error: "/login", // error page
   },
-  debug: process.env.NODE_ENV === "development", // debug mode
+  debug: process.env.LOCAL_ENV === "development", // debug mode
 };
 
-const handler = NextAuth(authOptions); // handler to handle the auth
-export { handler as GET, handler as POST }; // export the handler
+const nextAuth = NextAuth(authOptions); // handler to handle the auth
+export { nextAuth as GET, nextAuth as POST }; // export the handler

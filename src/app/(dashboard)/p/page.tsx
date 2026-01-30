@@ -1,5 +1,6 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Box, Calendar, FileText, Users2 } from "lucide-react";
+import Link from "next/link";
 import ButtonCreate from "./(_components)/button-create";
 const projects = [
   {
@@ -116,7 +117,8 @@ export default function ProjectPage() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {projects.map((project) => (
-          <Card key={project.id} className="w-full shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <Link href={`/p/${project.id}`} key={project.id}>
+          <Card key={project.id}  className="w-full shadow-lg hover:shadow-xl transition-shadow duration-300">
           <CardHeader>
             <CardTitle>
               <div className="flex justify-between items-center">
@@ -127,6 +129,7 @@ export default function ProjectPage() {
             <CardDescription>{project.description}</CardDescription>
           </CardHeader>
           </Card>
+          </Link>
         ))}
       </div>
     </div>

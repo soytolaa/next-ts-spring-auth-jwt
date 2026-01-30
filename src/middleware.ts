@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   }
   
   // Add pathname to headers for server components
-  const requestHeaders = new Headers(request.headers);
+  const requestHeaders = new Headers(request.headers);  
   requestHeaders.set("x-pathname", request.nextUrl.pathname);
   
   return NextResponse.next({

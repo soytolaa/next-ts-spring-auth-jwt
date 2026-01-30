@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Maven_Pro } from "next/font/google";
-import "./globals.css";
+import "./globals.css"; 
 import { Toaster } from "react-hot-toast";
 import NextTopLoader from "nextjs-toploader";
 const mavenPro = Maven_Pro({    
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   return (
     <html>
       <body className={`${mavenPro.className} antialiased`}>
-        <NextTopLoader color="green" height={4} showSpinner={false} />
+        <NextTopLoader color="black" height={4} showSpinner={false} /> 
         <Toaster position="top-center" />
         {children}
       </body>

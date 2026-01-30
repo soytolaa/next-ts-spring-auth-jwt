@@ -50,7 +50,7 @@ export default function LoginPage() {
       if (res.ok) {
         // if response is ok then login successfully
         toast.success("Login successfully!");
-        router.push("/admin");
+        router.push("/d");
         setIsLoading(false);
       } else {
         switch (
@@ -94,13 +94,13 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     try {
       const res = await signIn("google", {
-        callbackUrl: "/admin", // after login redirect to admin page
-        redirect: false, // prevent redirect to /admin it will wait for the response
+        callbackUrl: "/d", // after login redirect to dashboard page
+        redirect: false, // prevent redirect to /d it will wait for the response
       });
       if (res?.ok) {
         // if response is ok then login successfully
         toast.success("Login successfully!");
-        router.push("/admin");
+        router.push("/d");
         setIsLoading(false);
       }
     } catch (error) {
@@ -113,13 +113,13 @@ export default function LoginPage() {
   const handleGithubSignIn = async () => {
     try {
       const res = await signIn("github", {
-        callbackUrl: "/admin", // after login redirect to admin page
-        redirect: false, // prevent redirect to /admin it will wait for the response
+        callbackUrl: "/d", // after login redirect to dashboard page
+        redirect: false, // prevent redirect to /d it will wait for the response
       });
       if (res?.ok) {
         // if response is ok then login successfully
         toast.success("Login successfully!");
-        router.push("/admin");
+        router.push("/d");
         setIsLoading(false);
       }
     } catch (error) {

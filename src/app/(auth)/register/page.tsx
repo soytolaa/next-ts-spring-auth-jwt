@@ -90,12 +90,12 @@ export default function RegisterPage() {
   const handleGoogleSignIn = async () => {
     try {
       const res = await signIn("google", {
-        callbackUrl: "/admin",
+        callbackUrl: "/d",
         redirect: false,
       });
       if (res?.ok) {
         toast.success("Login successfully!");
-        router.push("/admin");
+        router.push("/d");
         setIsLoading(false);
       }
     } catch (error) {
@@ -107,12 +107,12 @@ export default function RegisterPage() {
   const handleGithubSignIn = async () => {
     try {
       const res = await signIn("github", {
-        callbackUrl: "/admin",
+        callbackUrl: "/d",
         redirect: false,
       });
       if (res?.ok) {
         toast.success("Login successfully!");
-        router.push("/admin");
+        router.push("/d");
         setIsLoading(false);
       }
     } catch (error) {

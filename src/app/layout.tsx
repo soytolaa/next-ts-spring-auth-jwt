@@ -13,17 +13,13 @@ export const metadata: Metadata = {
   description: "Manage your tasks and projects easily and efficiently",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+    export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html>
       <body className={`${mavenPro.className} antialiased`}>
         <NextTopLoader color="green" height={4} showSpinner={false} />
-        {children}
         <Toaster position="top-center" />
+        {children}
       </body>
     </html>
   );

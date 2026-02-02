@@ -64,21 +64,21 @@ const RecoveryPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8 dark:from-emerald-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl dark:border-gray-700 dark:bg-gray-900 dark:shadow-xl dark:shadow-black">
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
               Bean Team
             </span>
           </div>
 
-          <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Mail className="w-8 h-8 text-emerald-600" />
+          <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Mail className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900">Account Recovery</h2>
-          <p className="text-sm text-gray-600 mt-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Account Recovery</h2>
+          <p className="text-sm text-gray-600 mt-2 dark:text-gray-400">
             Enter your email address and we'll send you a recovery code
           </p>
         </div>
@@ -86,7 +86,7 @@ const RecoveryPage = () => {
         <form onSubmit={handleRecoveryAccount} className="mt-8 space-y-6">
           <div className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700">
+              <Label htmlFor="email" className="text-gray-700 dark:text-gray-100">
                 Email address
               </Label>
               <Input
@@ -94,19 +94,19 @@ const RecoveryPage = () => {
                 name="email"
                 placeholder="name@example.com"
                 className={`${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50`}
+                  errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-700"
+                } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50`}
               />
               {errors.email && (
                 <p className="text-sm text-red-500 mt-1">{errors.email}</p>
               )}
             </div>
 
-            <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-lg">
-              <p className="text-sm text-emerald-800">
+            <div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 p-4 rounded-lg">
+              <p className="text-sm text-emerald-800 dark:text-emerald-200">
                 <strong>What happens next?</strong>
               </p>
-              <ul className="text-sm text-emerald-700 mt-2 space-y-1">
+              <ul className="text-sm text-emerald-700 dark:text-emerald-300 mt-2 space-y-1">
                 <li>• We'll send a 6-digit verification code to your email</li>
                 <li>• Enter the code on the next page</li>
                 <li>• Create a new password for your account</li>
@@ -114,7 +114,7 @@ const RecoveryPage = () => {
             </div>
 
             <Button
-              className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium"
+              className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium dark:from-emerald-400 dark:to-teal-400 dark:hover:from-emerald-300 dark:hover:to-teal-300"
               type="submit"
               disabled={isLoading}
             >
@@ -122,22 +122,22 @@ const RecoveryPage = () => {
             </Button>
           </div>
 
-          <div className="text-center text-sm text-gray-600 mt-6">
+          <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
             <Link
               href="/login"
-              className="inline-flex items-center text-emerald-600 hover:text-emerald-800 font-medium hover:underline"
+              className="inline-flex items-center text-emerald-600 hover:text-emerald-800 font-medium hover:underline dark:text-emerald-400 dark:hover:text-emerald-200"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
               Back to login
             </Link>
           </div>
 
-          <div className="pt-4 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center">
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
               Don't have an account?{" "}
               <Link
                 href="/register"
-                className="text-emerald-600 hover:text-emerald-800 font-medium hover:underline"
+                className="text-emerald-600 hover:text-emerald-800 font-medium hover:underline dark:text-emerald-400 dark:hover:text-emerald-200"
               >
                 Create one here
               </Link>

@@ -30,14 +30,14 @@ const cards = [
 
 export default function DashboardPage() {
   return (
-    <div>
+    <div className="px-10 pt-2">
       <div>
         <h1 className="text-xl font-bold">Dashboard </h1>
         <p className="text-sm text-muted-foreground">Good Morning, <span className="font-bold">John Doe</span></p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
         {cards.map((card) => (
-          <Card key={card.id} className="w-full shadow-lg hover:shadow-xl transition-shadow duration-300">
+          <Card key={card.id} className="w-full shadow-lg hover:shadow-xl transition-shadow duration-300 p-4 h-full"> 
             <CardHeader>
               <CardTitle>
                 <div className="flex justify-between items-center">
@@ -47,7 +47,7 @@ export default function DashboardPage() {
               </CardTitle>
               <CardDescription className="text-4xl font-bold">10</CardDescription>
             </CardHeader>
-            <CardFooter>
+            <CardFooter className="p-0">
               <div className="flex justify-between items-center gap-2">
                 <div className="flex items-center gap-2">
                   <p className="text-sm text-muted-foreground">Members</p>
@@ -62,8 +62,8 @@ export default function DashboardPage() {
         ))}
       </div>
       {/* Create Chart Analyse Project and Task */}
-      <div className="w-full h-full rounded-lg p-4">
-        <h2 className="text-xl font-bold">Project And Task Analysis</h2>
+      <div className="w-full h-full rounded-lg mt-10">
+        <h2 className="text-xl font-bold mb-10">Project And Task Analysis</h2>
         <ChartBar />
       </div>
 

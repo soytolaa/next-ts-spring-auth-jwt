@@ -1,154 +1,231 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-
-const tasks = [
-  {
-    id: 1,
-    title: "Task 1",
-    description: "Task 1 Description",
-  },
-  {
-    id: 2,
-    title: "Task 2",
-    description: "Task 2 Description",
-  },
-  {
-    id: 3,
-    title: "Task 3",
-    description: "Task 3 Description",
-  },
-  {
-    id: 4,
-    title: "Task 4",
-    description: "Task 4 Description",
-  },
-  {
-    id: 5,
-    title: "Task 5",
-    description: "Task 5 Description",
-  },
-  {
-    id: 6,
-    title: "Task 6",
-    description: "Task 6 Description",
-  },
-  {
-    id: 7,
-    title: "Task 7",
-    description: "Task 7 Description",
-  },
-  {
-    id: 8,
-    title: "Task 8",
-    description: "Task 8 Description",
-  },
-  {
-    id: 9,
-    title: "Task 9",
-    description: "Task 9 Description",
-  },
-  {
-    id: 10,
-    title: "Task 10",
-    description: "Task 10 Description",
-  },  
-  {
-    id: 11,
-    title: "Task 11",
-    description: "Task 11 Description",
-  },
-  {
-    id: 12,
-    title: "Task 12",
-    description: "Task 12 Description",
-  },
-  {
-    id: 13,
-    title: "Task 13",
-    description: "Task 13 Description",
-  },
-  {
-    id: 14,
-    title: "Task 14",
-    description: "Task 14 Description",
-  },
-  {
-    id: 15,
-    title: "Task 15",
-    description: "Task 15 Description",
-  },
-]
+import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Heart, MessageSquare } from "lucide-react";
+import { DatePickerRange } from "@/components/date-picker-range";
+import { Badge } from "@/components/ui/badge";
+import { ButtonTask } from "./_components/button-task";
+import { getTasksByProjectIdAction } from "@/action/taskAction";
+import { TaskResponse } from "@/types/task";
+import { Priority, Status } from "@/types/enums/Status";
 const members = [
   {
     id: 1,
-    name: "Member 1",
-    email: "member1@example.com",
+    name: "Mr.Bean", 
+    email: "mrbean@example.com",
+    role: "Developer",
   },
   {
     id: 2,
-    name: "Member 2",
-    email: "member2@example.com",
+    name: "Mr.Mind",
+    email: "mrmind@example.com",
+    role: "Designer",
   },
   {
     id: 3,
-    name: "Member 3",
-    email: "member3@example.com",
+    name: "Mr.Doe",
+    email: "mrdoe@example.com",
+    role: "Manager",
   },
   {
     id: 4,
-    name: "Member 4",
-    email: "member4@example.com",
+    name: "Mr.Smith",
+    email: "mrsmith@example.com",
+    role: "Developer",
   },
   {
     id: 5,
-    name: "Member 5",
-    email: "member5@example.com",
+    name: "Mr.Brown",
+    email: "mrbrown@example.com",
+    role: "Designer",
+  },
+  {
+    id: 6,
+    name: "Mr.Green",
+    email: "mrgreen@example.com",
+    role: "Developer",
+  },
+  {
+    id: 7,
+    name: "Mr.Black",
+    email: "mrblack@example.com",
+    role: "Manager",
+  },
+  {
+    id: 8,
+    name: "Mr.White",
+    email: "mrwhite@example.com",
+    role: "Designer",
+  },
+  {
+    id: 9,
+    name: "Mr.Gray",
+    email: "mrgray@example.com",
+    role: "Developer",
+  },
+  {
+    id: 10,
+    name: "Mr.Purple",
+    email: "mrpurple@example.com",
+    role: "Designer",
+  },
+  {
+    id: 11,
+    name: "Mr.Pink",
+    email: "mrpink@example.com",
+    role: "Developer",
+  },
+  {
+    id: 12,
+    name: "Mr.Orange",
+    email: "mrorange@example.com",
+    role: "Manager",
   },
 ]
-export default async function ProjectDetailPage({ params }: { params: { slug: string } }) {
+
+
+export default async function ProjectDetailPage({ params, searchParams }: { params: { slug: string }, searchParams: { proNm: string } }) {
     const { slug } = await params;
+    const { proNm } = await searchParams;
+    const tasks = await getTasksByProjectIdAction(Number(slug));  
     console.log(slug);
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)] overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-8rem)] overflow-hidden px-10 pt-2">
       <div className="flex justify-between items-center mb-4 shrink-0">
-        <h1 className="text-xl font-bold">Project Detail {slug}</h1>
-        <Button>Create Task</Button>
+        <h1 className="text-xl font-bold">{proNm}</h1>
+        <ButtonTask/>
       </div>
       {/* Main Content Container */}
       <div className="flex gap-4 w-full flex-1 min-h-0 overflow-hidden">
         {/* Task Block - 70% */}
-        <div className="w-[70%] h-full flex flex-col   border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="flex-1 overflow-y-auto p-4 min-h-0 scrollbar-hide">
-            {tasks.map((task) => (
-            <div key={task.id} className="flex flex-col gap-2 w-full border border-gray-200 rounded-lg p-2">     
-                <div className="flex items-center gap-2 p-2 rounded hover:bg-gray-50">
-                  <p>{task.title}</p>
-                </div>
-              </div>
+        <div className="w-[70%] h-full flex flex-col  shadow-sm overflow-hidden">
+          <ScrollArea className="flex-1 min-h-0 scroll-area-hide-scrollbar">
+            {tasks.payload.map((task: TaskResponse) => (
+              // the frist card dont use mt
+            <Card key={task.id} className={`flex flex-col gap-2 w-full rounded-lg p-4 ${tasks.payload.indexOf(task) === 0 ? 'mt-0' : 'mt-16'}`} >
+                <CardHeader className="gap-2 p-2 rounded border-b">
+                  {/* Add avatar and name of the task owner */}
+                  <div className="flex items-center gap-2">
+                    <Avatar>
+                    <AvatarImage src={"https://github.com/shadcn.png"} />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  {/* Add name and date of the task owner */}
+                  <div>
+                    <p className="text-m font-bold">{"Mr.Bean"}</p>
+                    <p className="text-sm text-muted-foreground">{"10.12.2025"}</p>
+                  </div>
+                  </div>
+                  {/* Add task title and description */}
+                  <CardTitle>{task.name}</CardTitle>
+                  <CardDescription>{task.description}</CardDescription>
+                </CardHeader>
+                {/*  */}
+                <CardContent className="border-b flex flex-col gap-5">
+                  {/* assign to */}
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium w-20">Assign to</Label>
+                    {task.assignees.map((assignTo,index) => (
+                    <Badge key={index} variant="outline" className="bg-transparent font-normal border rounded-lg text-sm px-2 py-1 w-32 text-center justify-center items-center">
+                        {assignTo}
+                      </Badge>              
+                      ))}
+                  </div>
+                  {/* Status of the task */}
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium w-20">Status</Label>
+                    <DropdownMenu >
+                    <DropdownMenuTrigger className="bg-transparent border rounded-lg px-2 py-1 text-sm w-32">
+                        {task.status === Status.PENDING ? "PENDING" : task.status === Status.PROGRESS ? "PROGRESS" : task.status === Status.COMPLETED ? "COMPLETED" : task.status === Status.CANCELLED ? "CANCELLED" : task.status === Status.ON_HOLD ? "ON HOLD" : "FEEDBACK"}    
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-40">
+                        {Object.values(Status).map((status) => (
+                          <DropdownMenuItem key={status}>
+                            {status}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  {/* Priority of the task */}
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium w-20">Priority</Label>
+                    <DropdownMenu >
+                    <DropdownMenuTrigger className="bg-transparent border rounded-lg px-2 py-1 text-sm w-32">
+                        { task.priorityStatus === Priority.LOW && "LOW" || task.priorityStatus === Priority.MEDIUM && "MEDIUM" || task.priorityStatus === Priority.HIGH && "HIGH" || task.priorityStatus === Priority.URGENT && "URGENT" || "LOW"}
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-40">
+                        {Object.values(Priority).map((priority) => (
+                          <DropdownMenuItem key={priority.valueOf()}>
+                            {priority}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  {/* Date of the task */}
+                  <div className="flex items-center gap-2">
+                    <Label className="text-sm font-medium w-20">Due Date</Label>
+                    <DatePickerRange assignAt={task.assignedAt} dueAt={task.dueAt}/>
+                  </div>
+                
+                </CardContent>
+                <CardFooter className="mt-auto">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 border rounded-md">
+                      <p className="text-sm text-muted-foreground">Likes</p>
+                      <Button variant="outline" className="p-0" size="icon">
+                          <Heart className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="flex items-center gap-2 border rounded-md">   
+                      <p className="text-sm text-muted-foreground">Comments</p>
+                      <Button variant="outline" className="p-0" size="icon">
+                        <MessageSquare className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardFooter>
+              </Card>
             ))}
-          </div>
+          </ScrollArea>
         </div>
 
         {/* Contributors Block - 30% */}
-        <div className="w-[30%] h-full flex flex-col rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-gray-200 shrink-0">
-            <h2 className="text-xl font-bold">Contributors</h2>
+        <div className="w-[30%] h-full max-w-[30%] min-w-[30%] flex flex-col rounded-lg border shadow-sm overflow-hidden">
+          <div className="p-4 border-b shrink-0">
+            <h2 className="text-l ">Contributors</h2>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 min-h-0 scrollbar-hide">
+          <ScrollArea className="flex-1 min-h-0 p-4 scroll-area-hide-scrollbar">
             <div className="flex flex-col gap-2">
               {members.map((member) => (
-                <div key={member.id} className="flex items-center gap-2 p-2 rounded hover:bg-gray-50">
-                  <Avatar>
-                    <AvatarImage src={member.email} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <p>{member.name}</p>
-                </div>
+                <Card key={member.id} className="flex flex-col gap-2 w-full rounded-lg p-2">
+                  <CardHeader className="pl-2 rounded flex flex-col justify-between">
+                    <div className="flex items-center justify-between gap-2">
+                      <Avatar>
+                        <AvatarImage src={"https://github.com/shadcn.png"} />
+                        <AvatarFallback>CN</AvatarFallback>
+                      </Avatar>
+                      <div className="">
+                        <CardTitle className="text-sm font-normal">{member.name}</CardTitle>
+                        <CardDescription className="text-xs text-muted-foreground">{member.email}</CardDescription>
+                      </div>
+                      <div className="flex items-center gap-2">
+                      <Badge variant="outline" className={`bg-transparent font-normal border rounded-lg text-xs px-2 py-1 w-20 text-center justify-center items-center ${member.role === "Developer" ? "bg-green-500" : member.role === "Designer" ? "bg-blue-500" : member.role === "Manager" ? "bg-red-500" : "bg-gray-500"}`}>
+                        {member.role}
+                      </Badge>
+                    </div>
+                    </div>
+                  
+                  </CardHeader>
+                </Card>
               ))}
             </div>
-          </div>
+          </ScrollArea>
         </div>
       </div>
     </div>

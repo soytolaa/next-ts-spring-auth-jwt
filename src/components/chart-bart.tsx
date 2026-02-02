@@ -28,17 +28,17 @@ const chartData = [
 const chartConfig = {
   project: {
     label: "Project",
-    color: "#10b981", // dark green
+    color: "#ff0000", // dark red
   },
   task: {
     label: "Task",
-    color: "#", // dark
+    color: "#0000ff", // dark blue
   },
 } satisfies ChartConfig
 
 export function ChartBar() {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[500px] w-full" style={{ backgroundColor: "white" }}>
+    <ChartContainer config={chartConfig} className="min-h-[500px] w-full"> 
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis

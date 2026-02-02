@@ -129,16 +129,16 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8 dark:from-emerald-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="w-full max-w-md space-y-8 p-8 rounded-xl border border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-900 dark:shadow-xl dark:p-8 dark:shadow-black">
         <div className="text-center">
             {/* <div className="flex items-center justify-center space-x-2 mb-4">
               <span className="text-2xl font-bold text-gray-900">
                 Bean Team
               </span>
             </div> */}
-          <h2 className="text-2xl font-bold text-gray-900">Sign In to your account</h2>
-          <p className="text-sm text-gray-600 mt-2">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Sign In to your account</h2>
+          <p className="text-sm text-gray-600 mt-2 dark:text-gray-400">
             Enter your credentials to access your account
           </p>
         </div>
@@ -146,7 +146,7 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="mt-8 space-y-6">
           <div className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-700">
+              <Label htmlFor="email" className="text-gray-700 dark:text-gray-100">
                 Email
               </Label>
               <Input
@@ -154,8 +154,8 @@ export default function LoginPage() {
                 name="email"
                 placeholder="name@example.com"
                 className={`${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50`}
+                  errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-700"
+                } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50`}
               />
               {errors.email && (
                 <p className="text-sm text-red-500 mt-1">{errors.email}</p>
@@ -164,12 +164,12 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <Label htmlFor="password" className="text-gray-700">
+                <Label htmlFor="password" className="text-gray-700 dark:text-gray-100">
                   Password
                 </Label>
                 <Link
                   href="/recovery"
-                  className="text-sm text-emerald-600 hover:text-emerald-800 hover:underline"
+                  className="text-sm text-emerald-600 hover:text-emerald-800 hover:underline dark:text-emerald-400 dark:hover:text-emerald-200"
                 >
                   Forgot password?
                 </Link>
@@ -181,14 +181,14 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   className={`${
-                    errors.password ? "border-red-500" : "border-gray-300"
-                  } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50`}
+                    errors.password ? "border-red-500" : "border-gray-300 dark:border-gray-700"
+                  } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50`}
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 dark:hover:border-gray-700"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -204,7 +204,7 @@ export default function LoginPage() {
             </div>
 
             <Button
-              className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium"
+              className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium dark:from-emerald-400 dark:to-teal-400 dark:hover:from-emerald-300 dark:hover:to-teal-300"
               type="submit"
               disabled={isLoading}
             >
@@ -214,10 +214,10 @@ export default function LoginPage() {
         </form>
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-gray-200" />
+            <span className="w-full border-t border-gray-200 dark:border-gray-700" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-4 text-gray-500">
+            <span className="bg-white dark:bg-gray-900 px-4 text-gray-500 dark:text-gray-400 dark:border-gray-700">
               Or continue with
             </span>
           </div>
@@ -225,7 +225,7 @@ export default function LoginPage() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            className="w-full h-11 border-gray-300 hover:bg-gray-50 hover:border-gray-400 flex items-center justify-center"
+            className="w-full h-11 border-gray-300 hover:bg-gray-50 hover:border-gray-400 flex items-center justify-center dark:border-gray-700 dark:hover:bg-gray-800 dark:hover:border-gray-700"
             onClick={handleGoogleSignIn}
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -250,7 +250,7 @@ export default function LoginPage() {
           </Button>
           <Button
             variant="outline"
-            className="w-full h-11 border-gray-300 hover:bg-gray-50 hover:border-gray-400 flex items-center justify-center"
+            className="w-full h-11 border-gray-300 hover:bg-gray-50 hover:border-gray-400 flex items-center justify-center dark:border-gray-700 dark:hover:bg-gray-800 dark:hover:border-gray-700"
             onClick={handleGithubSignIn}
           >
             <Github className="w-14 h-14 mr-2 text-black  " />

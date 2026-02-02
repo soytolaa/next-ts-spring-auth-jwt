@@ -130,29 +130,29 @@ export default function OtpPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md border border-gray-100 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8 dark:from-emerald-950 dark:via-gray-900 dark:to-gray-950">
+      <Card className="w-full max-w-md border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl dark:shadow-black">
         <CardHeader className="space-y-4 text-center pb-6">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
               Bean Team
             </span>
           </div>
 
-          <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Mail className="w-8 h-8 text-emerald-600" />
+          <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Mail className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
           </div>
 
-          <CardTitle className="text-2xl font-bold text-gray-900">
+          <CardTitle className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {getPageTitle()}
           </CardTitle>
-          <CardDescription className="text-gray-600 text-base">
+          <CardDescription className="text-gray-600 dark:text-gray-400 text-base">
             {getPageDescription()}
           </CardDescription>
 
           {email && (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-              <p className="text-sm text-emerald-800">
+            <div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-lg p-3">
+              <p className="text-sm text-emerald-800 dark:text-emerald-200">
                 Code sent to: <span className="font-medium">{email}</span>
               </p>
             </div>
@@ -170,34 +170,34 @@ export default function OtpPage() {
               <InputOTPGroup className="gap-2">
                 <InputOTPSlot
                   index={0}
-                  className="w-12 h-12 text-lg font-semibold border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50"
+                  className="w-12 h-12 text-lg font-semibold border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50"
                 />
                 <InputOTPSlot
                   index={1}
-                  className="w-12 h-12 text-lg font-semibold border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50"
+                  className="w-12 h-12 text-lg font-semibold border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50"
                 />
                 <InputOTPSlot
                   index={2}
-                  className="w-12 h-12 text-lg font-semibold border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50"
+                  className="w-12 h-12 text-lg font-semibold border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50"
                 />
                 <InputOTPSlot
                   index={3}
-                  className="w-12 h-12 text-lg font-semibold border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50"
+                  className="w-12 h-12 text-lg font-semibold border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50"
                 />
                 <InputOTPSlot
                   index={4}
-                  className="w-12 h-12 text-lg font-semibold border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50"
+                  className="w-12 h-12 text-lg font-semibold border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50"
                 />
                 <InputOTPSlot
                   index={5}
-                  className="w-12 h-12 text-lg font-semibold border-gray-300 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50"
+                  className="w-12 h-12 text-lg font-semibold border-gray-300 dark:border-gray-700 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50"
                 />
               </InputOTPGroup>
             </InputOTP>
           </div>
 
           <Button
-            className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium"
+            className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium dark:from-emerald-400 dark:to-teal-400 dark:hover:from-emerald-300 dark:hover:to-teal-300"
             onClick={handleVerify}
             disabled={isLoadingVerify || otpCode.length !== 6}
           >
@@ -205,7 +205,7 @@ export default function OtpPage() {
           </Button>
 
           <div className="text-center space-y-3">
-            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+            <div className="flex items-center justify-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
               <Clock className="w-4 h-4" />
               <span>
                 {optExpired
@@ -214,13 +214,13 @@ export default function OtpPage() {
               </span>
             </div>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               Didn't receive the code?{" "}
               <button
                 type="button"
                 className={`font-medium transition-colors ${
                   optExpired || !isLoadingResend
-                    ? "text-emerald-600 hover:text-emerald-800 hover:underline"
+                    ? "text-emerald-600 hover:text-emerald-800 hover:underline dark:text-emerald-400 dark:hover:text-emerald-200"
                     : "text-gray-400 cursor-not-allowed"
                 }`}
                 onClick={handleResend}
@@ -231,16 +231,16 @@ export default function OtpPage() {
             </p>
 
             {optExpired && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-800">
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3">
+                <p className="text-sm text-red-800 dark:text-red-200">
                   Your verification code has expired. Please request a new one.
                 </p>
               </div>
             )}
           </div>
 
-          <div className="pt-4 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center">
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
               Having trouble? Contact our support team for assistance.
             </p>
           </div>

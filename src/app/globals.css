@@ -161,4 +161,7 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
   }
+  .scroll-area-hide-scrollbar > div[data-radix-scroll-area-scrollbar] {
+    display: none;
+  }
 }

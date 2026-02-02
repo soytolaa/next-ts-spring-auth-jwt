@@ -99,29 +99,29 @@ const ForgotPasswordPage = () => {
       : "weak";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-teal-50 py-12 px-4 sm:px-6 lg:px-8 dark:from-emerald-950 dark:via-gray-900 dark:to-gray-950">
+      <div className="w-full max-w-md space-y-8 rounded-xl border border-gray-100 bg-white p-8 shadow-xl dark:border-gray-700 dark:bg-gray-900 dark:shadow-xl dark:shadow-black">
         <div className="text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <span className="text-2xl font-bold text-gray-900">
+            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
               Coocon Team
             </span>
           </div>
 
-          <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 text-emerald-600" />
+          <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
             Reset Your Password
           </h2>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-gray-600 mt-2 dark:text-gray-400">
             Create a new password for your account
           </p>
 
           {email && (
-            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 mt-4">
-              <p className="text-sm text-emerald-800">
+            <div className="bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 rounded-lg p-3 mt-4">
+              <p className="text-sm text-emerald-800 dark:text-emerald-200">
                 <span className="font-medium">{email}</span>
               </p>
             </div>
@@ -131,7 +131,7 @@ const ForgotPasswordPage = () => {
         <form onSubmit={handleForgotPassword} className="mt-8 space-y-6">
           <div className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="newPassword" className="text-gray-700">
+              <Label htmlFor="newPassword" className="text-gray-700 dark:text-gray-100">
                 New Password
               </Label>
               <div className="relative">
@@ -141,15 +141,15 @@ const ForgotPasswordPage = () => {
                   type={showNewPassword ? "text" : "password"}
                   placeholder="Enter your new password"
                   className={`${
-                    errors.newPassword ? "border-red-500" : "border-gray-300"
-                  } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50`}
+                    errors.newPassword ? "border-red-500" : "border-gray-300 dark:border-gray-700"
+                  } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50`}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 dark:hover:border-gray-700"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                 >
                   {showNewPassword ? (
@@ -201,7 +201,7 @@ const ForgotPasswordPage = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmNewPassword" className="text-gray-700">
+              <Label htmlFor="confirmNewPassword" className="text-gray-700 dark:text-gray-100">
                 Confirm New Password
               </Label>
               <div className="relative">
@@ -213,14 +213,14 @@ const ForgotPasswordPage = () => {
                   className={`${
                     errors.confirmNewPassword
                       ? "border-red-500"
-                      : "border-gray-300"
-                  } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50`}
+                      : "border-gray-300 dark:border-gray-700"
+                  } h-11 focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50 dark:focus:border-emerald-500 dark:focus:ring-emerald-200 dark:focus:ring-opacity-50`}
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-800 dark:hover:border-gray-700"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
@@ -237,55 +237,55 @@ const ForgotPasswordPage = () => {
               )}
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="text-sm font-medium text-gray-700 mb-2">
+            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <p className="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
                 Password requirements:
               </p>
               <ul className="space-y-1">
                 <li className="flex items-center text-sm">
                   {hasMinLength ? (
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-2" />
                   ) : (
-                    <XCircle className="w-4 h-4 text-gray-300 mr-2" />
+                    <XCircle className="w-4 h-4 text-gray-300 dark:text-gray-600 mr-2" />
                   )}
                   <span
-                    className={hasMinLength ? "text-gray-700" : "text-gray-500"}
+                    className={hasMinLength ? "text-gray-700 dark:text-gray-200" : "text-gray-500 dark:text-gray-400"}
                   >
                     At least 8 characters long
                   </span>
                 </li>
                 <li className="flex items-center text-sm">
                   {hasUppercase ? (
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-2" />
                   ) : (
-                    <XCircle className="w-4 h-4 text-gray-300 mr-2" />
+                    <XCircle className="w-4 h-4 text-gray-300 dark:text-gray-600 mr-2" />
                   )}
                   <span
-                    className={hasUppercase ? "text-gray-700" : "text-gray-500"}
+                    className={hasUppercase ? "text-gray-700 dark:text-gray-200" : "text-gray-500 dark:text-gray-400"}
                   >
                     At least one uppercase letter
                   </span>
                 </li>
                 <li className="flex items-center text-sm">
                   {hasLowercase ? (
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-2" />
                   ) : (
-                    <XCircle className="w-4 h-4 text-gray-300 mr-2" />
+                    <XCircle className="w-4 h-4 text-gray-300 dark:text-gray-600 mr-2" />
                   )}
                   <span
-                    className={hasLowercase ? "text-gray-700" : "text-gray-500"}
+                    className={hasLowercase ? "text-gray-700 dark:text-gray-200" : "text-gray-500 dark:text-gray-400"}
                   >
                     At least one lowercase letter
                   </span>
                 </li>
                 <li className="flex items-center text-sm">
                   {hasNumber ? (
-                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    <CheckCircle className="w-4 h-4 text-green-500 dark:text-green-400 mr-2" />
                   ) : (
-                    <XCircle className="w-4 h-4 text-gray-300 mr-2" />
+                    <XCircle className="w-4 h-4 text-gray-300 dark:text-gray-600 mr-2" />
                   )}
                   <span
-                    className={hasNumber ? "text-gray-700" : "text-gray-500"}
+                    className={hasNumber ? "text-gray-700 dark:text-gray-200" : "text-gray-500 dark:text-gray-400"}
                   >
                     At least one number
                   </span>
@@ -294,7 +294,7 @@ const ForgotPasswordPage = () => {
             </div>
 
             <Button
-              className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium"
+              className="w-full h-11 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium dark:from-emerald-400 dark:to-teal-400 dark:hover:from-emerald-300 dark:hover:to-teal-300"
               type="submit"
               disabled={isLoading || passwordStrength === "weak"}
             >
@@ -302,11 +302,11 @@ const ForgotPasswordPage = () => {
             </Button>
           </div>
 
-          <div className="text-center text-sm text-gray-600 mt-6">
+          <div className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
             Remember your password?{" "}
             <Link
               href="/login"
-              className="text-emerald-600 hover:text-emerald-800 font-medium hover:underline"
+              className="text-emerald-600 hover:text-emerald-800 font-medium hover:underline dark:text-emerald-400 dark:hover:text-emerald-200"
             >
               Back to login
             </Link>

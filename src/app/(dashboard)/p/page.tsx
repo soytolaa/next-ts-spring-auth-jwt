@@ -146,7 +146,7 @@ export default async function ProjectPage() {
             <div className="flex justify-between items-center gap-2">
               <div className="flex items-center gap-2">
                 <p className="text-sm text-muted-foreground">Members</p>
-                <p className="text-sm text-muted-foreground">{project.createdBy}</p>
+                <p className="text-sm text-muted-foreground">{""}</p>
               </div>
             </div>
           </CardFooter>

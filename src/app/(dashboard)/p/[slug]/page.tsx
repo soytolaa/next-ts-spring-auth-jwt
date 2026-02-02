@@ -12,6 +12,7 @@ import { ButtonTask } from "./_components/button-task";
 import { getTasksByProjectIdAction } from "@/action/taskAction";
 import { TaskResponse } from "@/types/task";
 import { Priority, Status } from "@/types/enums/Status";
+import { getUserInProjectAction } from "@/action/projectAction";
 const members = [
   {
     id: 1,
@@ -92,12 +93,13 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
     const { slug } = await params;
     const { proNm } = await searchParams;
     const tasks = await getTasksByProjectIdAction(Number(slug));  
-    console.log(slug);
+    const users = await getUserInProjectAction(Number(slug));
+    console.log(users);
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)] overflow-hidden px-10 pt-2">
       <div className="flex justify-between items-center mb-4 shrink-0">
         <h1 className="text-xl font-bold">{proNm}</h1>
-        <ButtonTask/>
+        <ButtonTask projectId={Number(slug)}  users={users.payload}/>
       </div>
       {/* Main Content Container */}
       <div className="flex gap-4 w-full flex-1 min-h-0 overflow-hidden">
@@ -131,7 +133,7 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
                     <Label className="text-sm font-medium w-20">Assign to</Label>
                     {task.assignees.map((assignTo,index) => (
                     <Badge key={index} variant="outline" className="bg-transparent font-normal border rounded-lg text-sm px-2 py-1 w-32 text-center justify-center items-center">
-                        {assignTo}
+                        {assignTo.userName}
                       </Badge>              
                       ))}
                   </div>
@@ -202,21 +204,21 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
           </div>
           <ScrollArea className="flex-1 min-h-0 p-4 scroll-area-hide-scrollbar">
             <div className="flex flex-col gap-2">
-              {members.map((member) => (
-                <Card key={member.id} className="flex flex-col gap-2 w-full rounded-lg p-2">
+              {users.payload.map((user) => (
+                <Card key={user.userId} className="flex flex-col gap-2 w-full rounded-lg p-2">
                   <CardHeader className="pl-2 rounded flex flex-col justify-between">
                     <div className="flex items-center justify-between gap-2">
                       <Avatar>
                         <AvatarImage src={"https://github.com/shadcn.png"} />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <div className="">
-                        <CardTitle className="text-sm font-normal">{member.name}</CardTitle>
-                        <CardDescription className="text-xs text-muted-foreground">{member.email}</CardDescription>
+                      <div className="w-32">
+                        <CardTitle className="text-sm font-normal">{user.userName}</CardTitle>
+                        <CardDescription className="text-xs text-muted-foreground truncate">{user.email}</CardDescription>
                       </div>
                       <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={`bg-transparent font-normal border rounded-lg text-xs px-2 py-1 w-20 text-center justify-center items-center ${member.role === "Developer" ? "bg-green-500" : member.role === "Designer" ? "bg-blue-500" : member.role === "Manager" ? "bg-red-500" : "bg-gray-500"}`}>
-                        {member.role}
+                      <Badge variant="outline" className={`bg-transparent font-normal border rounded-lg text-xs px-2 py-1 w-20 text-center justify-center items-center ${user.type === "Developer" ? "bg-green-500" : user.type === "Designer" ? "bg-blue-500" : user.type === "Manager" ? "bg-red-500" : "bg-gray-500"}`}>
+                        {user.type}
                       </Badge>
                     </div>
                     </div>

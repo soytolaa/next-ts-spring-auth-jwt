@@ -14,7 +14,7 @@ import { CalendarIcon } from "lucide-react"
 import { type DateRange } from "react-day-picker"  // import react-day-picker for date range picker
 import { DateTimeFormatter, LocalDateTime } from "@js-joda/core"
 
-export function DatePickerRange({assignAt, dueAt}: {assignAt: LocalDateTime | string | undefined, dueAt: LocalDateTime | string | undefined}) {
+export function DatePickerRange({assignAt, dueAt, onDateChange}: {assignAt: LocalDateTime | string | undefined, dueAt: LocalDateTime | string | undefined, onDateChange?: (dateRange: { from?: Date, to?: Date }) => void}) {
   // Helper function to convert LocalDateTime or ISO string to Date
   const parseDate = (dateValue: LocalDateTime | string | undefined): Date | undefined => {
     if (!dateValue) return undefined;
@@ -43,11 +43,18 @@ export function DatePickerRange({assignAt, dueAt}: {assignAt: LocalDateTime | st
       }
     }
     
-    return {
-      from: new Date(new Date().getFullYear(), 0, 20),
-      to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-    }
+    return undefined;
   })
+
+  const handleDateSelect = (selectedDate: DateRange | undefined) => {
+    setDate(selectedDate);
+    if (onDateChange) {
+      onDateChange({
+        from: selectedDate?.from,
+        to: selectedDate?.to,
+      });
+    }
+  }
 
   return (
     <Field className="w-fit">
@@ -79,7 +86,7 @@ export function DatePickerRange({assignAt, dueAt}: {assignAt: LocalDateTime | st
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDateSelect}
             numberOfMonths={2}
           />
         </PopoverContent>

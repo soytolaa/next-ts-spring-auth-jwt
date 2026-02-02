@@ -8,7 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Heart, MessageSquare } from "lucide-react";
 import { DatePickerRange } from "@/components/date-picker-range";
 import { Badge } from "@/components/ui/badge";
-import { ButtonTask } from "./_components/button-task";
+import { ButtonTask } from "./(_components)/button-task";
 import { getTasksByProjectIdAction } from "@/action/taskAction";
 import { TaskResponse } from "@/types/task";
 import { Priority, Status } from "@/types/enums/Status";

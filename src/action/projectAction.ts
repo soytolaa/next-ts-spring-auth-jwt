@@ -3,9 +3,11 @@ import { createProjectService, getProjectsService, getUserInProjectService } fro
 import { User } from "@/types/auth";
 import { ApiResponse } from "@/types/next-auth";
 import { ProjectRequest, ProjectResponse } from "@/types/project";
+import { revalidateTag } from "next/cache";
 
 export const createProjectAction = async (data: ProjectRequest): Promise<ApiResponse<ProjectResponse>> => {
-  const response = await createProjectService(data);
+  const response = await createProjectService(data);  
+  revalidateTag("project")
   return response;
 }
 

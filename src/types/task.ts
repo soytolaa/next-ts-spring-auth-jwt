@@ -1,6 +1,6 @@
-import { User } from "./auth";
+
 import { Priority, Status } from "./enums/Status";
-import { LocalDateTime } from "@js-joda/core";
+import { LocalDate, LocalDateTime } from "@js-joda/core";
 export interface TaskRequest {
   name: string;
   description: string;
@@ -8,8 +8,8 @@ export interface TaskRequest {
   priorityStatus: Priority;
   projectId: number;
   assignees: number [];
-  assignedAt?: LocalDateTime;
-  dueAt?: LocalDateTime;
+  assignedAt?: string;
+  dueAt?: string;
 }
 
 export interface TaskResponse {
@@ -20,8 +20,8 @@ export interface TaskResponse {
   priorityStatus: Priority;
   projectId: number;
   assignees: number[];
-  assignedAt?: LocalDateTime;
-  dueAt?: LocalDateTime;
+  assignedAt?: LocalDate;
+  dueAt?: LocalDate;
   createdAt: LocalDateTime;
   updatedAt: LocalDateTime;
 }

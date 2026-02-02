@@ -1,7 +1,6 @@
-import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogHeader, AlertDialogTrigger, AlertDialogFooter, AlertDialogDescription } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogHeader, AlertDialogFooter, AlertDialogDescription } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Pencil, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import * as React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -10,24 +9,26 @@ import { FormEvent } from "react";
 import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";    
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { DatePickerRange } from "@/components/date-picker-range";
 import { User } from "@/types/auth";
 import { createTaskAction } from "@/action/taskAction";
 import { Priority, Status } from "@/types/enums/Status";
-import { LocalDateTime } from "@js-joda/core";
+import { LocalDate } from "@js-joda/core";   
 import { TaskRequest } from "@/types/task";
-
+import { toast } from "react-hot-toast";
 export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boolean, setIsOpen: (open: boolean) => void, projectId: number, users: User[] }) {
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<Status>(Status.PENDING);
     const [selectedPriority, setSelectedPriority] = useState<Priority>(Priority.LOW);
     const [selectedAssignTo, setSelectedAssignTo] = useState<number | null>(users.length > 0 ? users[0].userId : null);
-    const [dateRange, setDateRange] = useState<{ from?: Date, to?: Date }>({});
+    const [dateRange, setDateRange] = React.useState<{
+      from?: LocalDate
+      to?: LocalDate
+    }>({})
 
     // Reset form when dialog closes
-    React.useEffect(() => {
+    useEffect(() => {
         if (!isOpen) {
             setSelectedStatus(Status.PENDING);
             setSelectedPriority(Priority.LOW);
@@ -44,50 +45,19 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boole
         setIsLoading(true);
         try {
             const formData = new FormData(e.currentTarget);
-            
-            // Convert Date objects to ISO strings for API
-            const assignedAtISO = dateRange.from ? dateRange.from.toISOString() : undefined;
-            const dueAtISO = dateRange.to ? dateRange.to.toISOString() : undefined;
-            
-            // Prepare request payload matching API format
-            const taskRequestPayload = {
+            const taskRequest: TaskRequest = {
                 name: formData.get("name") as string,
                 description: formData.get("description") as string,
                 status: selectedStatus,
                 priorityStatus: selectedPriority,
                 projectId: projectId,
-                assignees: selectedAssignTo ? [selectedAssignTo] : [], // Array of user IDs (numbers)
-                assignedAt: assignedAtISO, // ISO string
-                dueAt: dueAtISO, // ISO string
+                assignees: selectedAssignTo ? [users.find((user) => user.userId === selectedAssignTo)?.userId as number] : [],
+                assignedAt: formData.get("assignedAt") as string,
+                dueAt: formData.get("dueAt") as string,
             }
-            
-            // Transform to TaskRequest format (with LocalDateTime) for the action
-            // Parse ISO string to LocalDateTime (remove milliseconds and timezone)
-            const parseToLocalDateTime = (isoString: string | undefined): LocalDateTime | undefined => {
-                if (!isoString) return undefined;
-                // ISO format: "2026-02-02T09:58:05.660Z" -> "2026-02-02T09:58:05"
-                const dateTimeString = isoString.split('.')[0].replace('Z', '');
-                return LocalDateTime.parse(dateTimeString);
-            };
-            
-            const taskRequest: TaskRequest = {
-                name: taskRequestPayload.name,
-                description: taskRequestPayload.description,
-                status: taskRequestPayload.status,
-                priorityStatus: taskRequestPayload.priorityStatus,
-                projectId: taskRequestPayload.projectId,
-                assignees: selectedAssignTo ? [users.find((user) => user.userId === selectedAssignTo)!] : [],
-                assignedAt: parseToLocalDateTime(assignedAtISO),
-                dueAt: parseToLocalDateTime(dueAtISO),
-            }
-            
-            console.log("API Payload:", taskRequestPayload);
-            const task = await createTaskAction(taskRequest);
-            console.log("Task created:", task);
-            
-            // Close dialog on success
+            await createTaskAction(taskRequest);
             setIsOpen(false);
-          
+            toast.success("Task created successfully");
         } catch (error) {
             console.error("Error creating task:", error);
         } finally {
@@ -189,12 +159,21 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boole
             <div className="flex items-center gap-2">
                 <Label className="text-sm font-medium w-20">Due Date</Label>
                 <DatePickerRange 
-                    assignAt={dateRange.from?.toISOString()} 
-                    dueAt={dateRange.to?.toISOString()}
-                    onDateChange={setDateRange}
+                     assignAt={dateRange.from}
+                     dueAt={dateRange.to}
+                     onDateChange={setDateRange}
+                     
                 />
-                <input type="hidden" name="assignAt" value={dateRange.from?.toISOString() || ""} />
-                <input type="hidden" name="dueAt" value={dateRange.to?.toISOString() || ""} />
+                <input
+                  type="hidden"
+                  name="assignedAt"
+                  value={dateRange.from?.toString() || ""}
+                />
+                <input
+                  type="hidden"
+                  name="dueAt"
+                  value={dateRange.to?.toString() || ""}
+                />
             </div>
             {/* Task Description */}
               <div className="space-y-2">

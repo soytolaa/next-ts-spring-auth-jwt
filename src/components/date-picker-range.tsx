@@ -3,88 +3,117 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Field } from "@/components/ui/field"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { addDays, format } from "date-fns"  // import date-fns for formatting dates
+import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
-import { type DateRange } from "react-day-picker"  // import react-day-picker for date range picker
-import { DateTimeFormatter, LocalDateTime } from "@js-joda/core"
+import { type DateRange } from "react-day-picker"
+import { LocalDate } from "@js-joda/core"
 
-export function DatePickerRange({assignAt, dueAt, onDateChange}: {assignAt: LocalDateTime | string | undefined, dueAt: LocalDateTime | string | undefined, onDateChange?: (dateRange: { from?: Date, to?: Date }) => void}) {
-  // Helper function to convert LocalDateTime or ISO string to Date
-  const parseDate = (dateValue: LocalDateTime | string | undefined): Date | undefined => {
-    if (!dateValue) return undefined;
-    
-    // If it's already a LocalDateTime object
-    if (typeof dateValue === 'object' && 'format' in dateValue) {
-      return new Date(dateValue.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
+type LocalDateLike = LocalDate | { year: number; month: number; day: number }
+
+type Props = {
+  assignAt?: LocalDateLike | Date
+  dueAt?: LocalDateLike | Date
+  onDateChange?: (dateRange: {
+    from?: LocalDate
+    to?: LocalDate
+  }) => void
+}
+
+export function DatePickerRange({
+  assignAt,
+  dueAt,
+  onDateChange,
+}: Props) {
+
+  /* ---------------- helpers ---------------- */
+
+  const localDateToDate = (value?: LocalDateLike | Date): Date | undefined => {
+    if (!value) return undefined
+
+    if (value instanceof LocalDate) {
+      return new Date(value.year(), value.monthValue() - 1, value.dayOfMonth())
     }
-    
-    // If it's an ISO string
-    if (typeof dateValue === 'string') {
-      return new Date(dateValue)
+
+    if (value instanceof Date) {
+      return value
     }
-    
-    return undefined;
+
+    if (
+      typeof value === "object" &&
+      "year" in value &&
+      "month" in value &&
+      "day" in value
+    ) {
+      return new Date(value.year, value.month - 1, value.day)
+    }
+
+    return undefined
   }
+
+  const dateToLocalDate = (value?: Date): LocalDate | undefined => {
+    if (!value) return undefined
+    return LocalDate.of(value.getFullYear(), value.getMonth() + 1, value.getDate())
+  }
+
+  /* ---------------- state ---------------- */
 
   const [date, setDate] = React.useState<DateRange | undefined>(() => {
-    const fromDate = parseDate(assignAt);
-    const toDate = parseDate(dueAt);
-    
-    if (fromDate || toDate) {
-      return {
-        from: fromDate || new Date(new Date().getFullYear(), 0, 20),
-        to: toDate || (fromDate ? addDays(fromDate, 20) : addDays(new Date(new Date().getFullYear(), 0, 20), 20)),
-      }
-    }
-    
-    return undefined;
+    const from = localDateToDate(assignAt)
+    const to = localDateToDate(dueAt)
+    if (from || to) return { from, to }
+    return undefined
   })
 
-  const handleDateSelect = (selectedDate: DateRange | undefined) => {
-    setDate(selectedDate);
+  /* ---------------- handlers ---------------- */
+
+  const handleDateSelect = (selected: DateRange | undefined) => {
+    setDate(selected)
+
     if (onDateChange) {
       onDateChange({
-        from: selectedDate?.from,
-        to: selectedDate?.to,
-      });
+        from: dateToLocalDate(selected?.from),
+        to: dateToLocalDate(selected?.to),
+      })
     }
   }
+
+  /* ---------------- UI ---------------- */
 
   return (
     <Field className="w-fit">
-      {/* <FieldLabel htmlFor="date-picker-range">Date Picker Range</FieldLabel> */}
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             id="date-picker-range"
-            className="justify-start px-2.5 font-normal"
+            className="justify-start px-2.5 font-normal gap-2"
           >
-            <CalendarIcon />
+            <CalendarIcon className="h-4 w-4" />
+
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, "dd.MM.yyyy")} -{" "}
+                  {format(date.to, "dd.MM.yyyy")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "dd.MM.yyyy")
               )
             ) : (
               <span>Pick a date</span>
             )}
           </Button>
         </PopoverTrigger>
+
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="range"
-            defaultMonth={date?.from}
             selected={date}
             onSelect={handleDateSelect}
             numberOfMonths={2}

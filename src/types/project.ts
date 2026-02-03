@@ -11,5 +11,6 @@ export interface ProjectResponse {
   description: string;
   createdAt: string;
   updatedAt: string;
-  assignees: User;
+  createdBy: number;
+  membersCount : number;
 }

@@ -86,7 +86,7 @@ export default function PopCreate({
             </div>
           </div>
           
-          <AlertDialogFooter className="mt-6">
+          <AlertDialogFooter className="mt-8">
             <Button 
               type="button" 
               variant="outline" 

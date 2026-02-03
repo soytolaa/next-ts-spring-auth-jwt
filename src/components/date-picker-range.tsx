@@ -14,7 +14,7 @@ import { CalendarIcon } from "lucide-react"
 import { type DateRange } from "react-day-picker"
 import { LocalDate } from "@js-joda/core"
 
-type LocalDateLike = LocalDate | { year: number; month: number; day: number }
+type LocalDateLike = LocalDate | { year: number; month: number; day: number } | string
 
 type Props = {
   assignAt?: LocalDateLike | Date
@@ -33,7 +33,7 @@ export function DatePickerRange({
 
   /* ---------------- helpers ---------------- */
 
-  const localDateToDate = (value?: LocalDateLike | Date): Date | undefined => {
+  const localDateToDate = React.useCallback((value?: LocalDateLike | Date): Date | undefined => {
     if (!value) return undefined
 
     if (value instanceof LocalDate) {
@@ -42,6 +42,21 @@ export function DatePickerRange({
 
     if (value instanceof Date) {
       return value
+    }
+
+    // Handle ISO date strings (from API)
+    if (typeof value === "string") {
+      const date = new Date(value)
+      if (!isNaN(date.getTime())) {
+        return date
+      }
+      // Try parsing as LocalDate format (YYYY-MM-DD)
+      const localDateMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})/)
+      if (localDateMatch) {
+        const [, year, month, day] = localDateMatch
+        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+      }
+      return undefined
     }
 
     if (
@@ -54,7 +69,7 @@ export function DatePickerRange({
     }
 
     return undefined
-  }
+  }, [])
 
   const dateToLocalDate = (value?: Date): LocalDate | undefined => {
     if (!value) return undefined
@@ -69,6 +84,17 @@ export function DatePickerRange({
     if (from || to) return { from, to }
     return undefined
   })
+
+  // Update date state when props change (e.g., when data loads from API)
+  React.useEffect(() => {
+    const from = localDateToDate(assignAt)
+    const to = localDateToDate(dueAt)
+    if (from || to) {
+      setDate({ from, to })
+    } else {
+      setDate(undefined)
+    }
+  }, [assignAt, dueAt, localDateToDate])
 
   /* ---------------- handlers ---------------- */
 

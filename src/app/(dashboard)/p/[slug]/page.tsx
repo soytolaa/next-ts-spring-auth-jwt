@@ -13,80 +13,6 @@ import { getTasksByProjectIdAction } from "@/action/taskAction";
 import { TaskResponse } from "@/types/task";
 import { Priority, Status } from "@/types/enums/Status";
 import { getUserInProjectAction } from "@/action/projectAction";
-const members = [
-  {
-    id: 1,
-    name: "Mr.Bean", 
-    email: "mrbean@example.com",
-    role: "Developer",
-  },
-  {
-    id: 2,
-    name: "Mr.Mind",
-    email: "mrmind@example.com",
-    role: "Designer",
-  },
-  {
-    id: 3,
-    name: "Mr.Doe",
-    email: "mrdoe@example.com",
-    role: "Manager",
-  },
-  {
-    id: 4,
-    name: "Mr.Smith",
-    email: "mrsmith@example.com",
-    role: "Developer",
-  },
-  {
-    id: 5,
-    name: "Mr.Brown",
-    email: "mrbrown@example.com",
-    role: "Designer",
-  },
-  {
-    id: 6,
-    name: "Mr.Green",
-    email: "mrgreen@example.com",
-    role: "Developer",
-  },
-  {
-    id: 7,
-    name: "Mr.Black",
-    email: "mrblack@example.com",
-    role: "Manager",
-  },
-  {
-    id: 8,
-    name: "Mr.White",
-    email: "mrwhite@example.com",
-    role: "Designer",
-  },
-  {
-    id: 9,
-    name: "Mr.Gray",
-    email: "mrgray@example.com",
-    role: "Developer",
-  },
-  {
-    id: 10,
-    name: "Mr.Purple",
-    email: "mrpurple@example.com",
-    role: "Designer",
-  },
-  {
-    id: 11,
-    name: "Mr.Pink",
-    email: "mrpink@example.com",
-    role: "Developer",
-  },
-  {
-    id: 12,
-    name: "Mr.Orange",
-    email: "mrorange@example.com",
-    role: "Manager",
-  },
-]
 
 
 export default async function ProjectDetailPage({ params, searchParams }: { params: { slug: string }, searchParams: { proNm: string } }) {
@@ -127,7 +53,7 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
                   <CardDescription>{task.description}</CardDescription>
                 </CardHeader>
                 {/*  */}
-                <CardContent className="border-b flex flex-col gap-5">
+                <CardContent className="border-b flex flex-col gap-5 pt-2">
                   {/* assign to */}
                   <div className="flex items-center gap-2">
                     <Label className="text-sm font-medium w-20">Assign to</Label>
@@ -172,7 +98,7 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
                   {/* Date of the task */}
                   <div className="flex items-center gap-2">
                     <Label className="text-sm font-medium w-20">Due Date</Label>
-                    <DatePickerRange assignAt={task.assignedAt} dueAt={task.dueAt}/>
+                    <DatePickerRange assignAt={task.assignedAt} dueAt={task.dueAt}/> 
                   </div>
                 
                 </CardContent>
@@ -216,13 +142,12 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
                         <CardTitle className="text-sm font-normal">{user.userName}</CardTitle>
                         <CardDescription className="text-xs text-muted-foreground truncate">{user.email}</CardDescription>
                       </div>
-                      <div className="flex items-center gap-2">
-                      <Badge variant="outline" className={`bg-transparent font-normal border rounded-lg text-xs px-2 py-1 w-20 text-center justify-center items-center ${user.type === "Developer" ? "bg-green-500" : user.type === "Designer" ? "bg-blue-500" : user.type === "Manager" ? "bg-red-500" : "bg-gray-500"}`}>
+                      <div className="flex items-center gap-2 px-2 py-1" >
+                      <Badge variant="outline" className="text-xs font-normal">
                         {user.type}
                       </Badge>
                     </div>
                     </div>
-                  
                   </CardHeader>
                 </Card>
               ))}

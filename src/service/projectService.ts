@@ -41,3 +41,15 @@ export async function getUserInProjectService(id: number): Promise<ApiResponse<U
   }
   return response.json() as Promise<ApiResponse<User[]>>;
 }
+
+export async function joinProjectService(code: string): Promise<ApiResponse<boolean>> {
+  const { headers } = await headerToken(false);
+  const response = await fetch(`${process.env.API_URL}/projects/code?code=${code}`, {
+    method: "POST",
+    headers: headers,
+  });
+  if (response.status !== 200) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+  return response.json() as Promise<ApiResponse<boolean>>;
+}

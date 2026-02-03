@@ -41,3 +41,14 @@ export async function joinProjectService(code: string): Promise<ApiResponse<bool
   });
   return response.json() as Promise<ApiResponse<boolean>>;
 }
+
+export async function updateProjectService(id: number, data: ProjectRequest): Promise<ApiResponse<ProjectResponse>> {
+  const { headers } = await headerToken(false);
+  const response = await fetch(`${process.env.API_URL}/projects/${id}`, {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify(data),
+  });
+  revalidateTag("projects");
+  return response.json() as Promise<ApiResponse<ProjectResponse>>;
+}

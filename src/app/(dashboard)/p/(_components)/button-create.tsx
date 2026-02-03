@@ -57,7 +57,7 @@ export default function ButtonCreate() {
           <DropdownMenuItem className="cursor-pointer" onClick={() => setIsOpen(true)}>Create Project</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
-      <PopCreate isOpen={isOpen} setIsOpen={setIsOpen} handleCreateProject={handleCreateProject} />
+      <PopCreate isOpen={isOpen} setIsOpen={setIsOpen} handleCreateProject={handleCreateProject} isCreate={true} />
       <PopJoinProject isOpen={isOpenJoinProject} setIsOpen={setIsOpenJoinProject} handleJoinProject={handleJoinProject}/>
     </DropdownMenu>
   )

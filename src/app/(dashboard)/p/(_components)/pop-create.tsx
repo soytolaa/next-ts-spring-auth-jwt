@@ -6,44 +6,73 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { useState, FormEvent, useRef, useEffect } from "react";
+import { ProjectResponse } from "@/types/project";
 
 export default function PopCreate({ 
   isOpen, 
   setIsOpen, 
-  handleCreateProject 
+  handleCreateProject,
+  handleUpdateProject,
+  isCreate,
+  project
 }: { 
   isOpen: boolean; 
   setIsOpen: (open: boolean) => void; 
-  handleCreateProject: (name: string, description: string) => Promise<void>; 
+  handleCreateProject?: (name: string, description: string) => Promise<void>; 
+  handleUpdateProject?: (id: number, name: string, description: string) => Promise<void>;
+  isCreate?: boolean;
+  project?: ProjectResponse;
 }) {   
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Reset form when dialog closes
+  // Populate form when project is provided (edit mode) or reset when dialog opens/closes
   useEffect(() => {
-    if (!isOpen && formRef.current) {
-      formRef.current.reset();
+    if (isOpen) {
+      if (project && !isCreate) {
+        // Edit mode - populate with project data
+        setName(project.name);
+        setDescription(project.description || "");
+      } else {
+        // Create mode - reset to defaults
+        setName("");
+        setDescription("");
+      }
+    } else {
+      // Reset when dialog closes
+      setName("");
+      setDescription("");
+      if (formRef.current) {
+        formRef.current.reset();
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, project, isCreate]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     
     try {
-      const formData = new FormData(e.currentTarget);
-      const name = (formData.get("name") as string)?.trim();
-      const description = (formData.get("description") as string)?.trim() || "";
+      const nameValue = name.trim();
+      const descriptionValue = description.trim() || "";
 
-      if (!name) {
+      if (!nameValue) {
         throw new Error("Project name is required");
       }
 
-      await handleCreateProject(name, description);
+      if (isCreate && handleCreateProject) {
+        await handleCreateProject(nameValue, descriptionValue);
+      } else if (!isCreate && project && handleUpdateProject) {
+        await handleUpdateProject(project.id, nameValue, descriptionValue);
+      }
+      
       setIsOpen(false);
     } catch (error) {
       // Error is handled by parent component
-      console.error("Error creating project:", error);
+      console.error(`Error ${isCreate ? 'creating' : 'updating'} project:`, error);
+      throw error; // Re-throw to let parent handle
     } finally {
       setIsLoading(false);
     }
@@ -54,9 +83,9 @@ export default function PopCreate({
       <AlertDialogContent className="max-w-md">
         <form ref={formRef} onSubmit={handleSubmit}>
           <AlertDialogHeader>
-            <AlertDialogTitle>New Project</AlertDialogTitle>
+            <AlertDialogTitle>{isCreate ? "New Project" : "Edit Project"}</AlertDialogTitle>
             <AlertDialogDescription>
-              Create a new project to organize your tasks and collaborate with your team.
+              {isCreate ? "Create a new project to organize your tasks and collaborate with your team." : "Edit the project details and collaborate with your team."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           
@@ -71,6 +100,8 @@ export default function PopCreate({
                 required
                 disabled={isLoading}
                 className="border-gray-300"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="space-y-2">
@@ -82,6 +113,8 @@ export default function PopCreate({
                 placeholder="Project Description (Optional)" 
                 disabled={isLoading}
                 className="border-gray-300"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
           </div>
@@ -102,10 +135,10 @@ export default function PopCreate({
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
+                  {isCreate ? "Creating..." : "Updating..."}
                 </>
               ) : (
-                "Create"
+                isCreate ? "Create" : "Update"
               )}
             </Button>
           </AlertDialogFooter>

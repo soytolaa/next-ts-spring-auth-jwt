@@ -1,5 +1,5 @@
 "use server";
-import { createProjectService, getProjectsService, getUserInProjectService, joinProjectService } from "@/service/projectService";
+import { createProjectService, getProjectsService, getUserInProjectService, joinProjectService, updateProjectService } from "@/service/projectService";
 import { User } from "@/types/auth";
 import { ApiResponse } from "@/types/next-auth";
 import { ProjectRequest, ProjectResponse } from "@/types/project";
@@ -24,6 +24,12 @@ export const getUserInProjectAction = async (id: number): Promise<ApiResponse<Us
 export const joinProjectAction = async (code: string): Promise<ApiResponse<boolean>> => {
   const response = await joinProjectService(code);
   console.log("response", response);
+  revalidateTag("project")
+  return response;
+}
+
+export const updateProjectAction = async (id: number, data: ProjectRequest): Promise<ApiResponse<ProjectResponse>> => {
+  const response = await updateProjectService(id, data);
   revalidateTag("project")
   return response;
 }

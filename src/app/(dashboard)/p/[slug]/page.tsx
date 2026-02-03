@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Heart, MessageSquare } from "lucide-react";
+import { Heart, MessageSquare, MoreVertical } from "lucide-react";
 import { DatePickerRange } from "@/components/date-picker-range";
 import { Badge } from "@/components/ui/badge";
 import { ButtonTask } from "./(_components)/button-task";
@@ -13,6 +13,10 @@ import { getTasksByProjectIdAction } from "@/action/taskAction";
 import { TaskResponse } from "@/types/task";
 import { Priority, Status } from "@/types/enums/Status";
 import { getUserInProjectAction } from "@/action/projectAction";
+import ButtonEdit from "../(_components)/button-edit";
+import DropdownEditAndDelete from "../(_components)/button-edit";
+import PriorityComponent from "../(_components)/priority";
+import StatusComponent from "../(_components)/status";
 
 
 export default async function ProjectDetailPage({ params, searchParams }: { params: { slug: string }, searchParams: { proNm: string } }) {
@@ -37,15 +41,20 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
             <Card key={task.id} className={`flex flex-col gap-2 w-full rounded-lg p-4 ${tasks.payload.indexOf(task) === 0 ? 'mt-0' : 'mt-16'}`} >
                 <CardHeader className="gap-2 p-2 rounded border-b">
                   {/* Add avatar and name of the task owner */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 justify-between">
+                    <div className="flex items-center gap-2">
                     <Avatar>
                     <AvatarImage src={"https://github.com/shadcn.png"} />
                     <AvatarFallback>CN</AvatarFallback>
+                    {/* Add name and date of the task owner */}
                   </Avatar>
-                  {/* Add name and date of the task owner */}
                   <div>
-                    <p className="text-m font-bold">{"Mr.Bean"}</p>
-                    <p className="text-sm text-muted-foreground">{"10.12.2025"}</p>
+                      <p className="text-m font-bold">{"Mr.Bean"}</p>
+                      <p className="text-sm text-muted-foreground">{"10.12.2025"}</p>
+                    </div></div>
+                  {/* ... To update the name and date of the task owner */}
+                  <div className="flex items-center gap-2 justify-end">
+                    <DropdownEditAndDelete projectId={Number(slug)} users={users.payload} task={task} taskId={task.id} />
                   </div>
                   </div>
                   {/* Add task title and description */}
@@ -66,34 +75,12 @@ export default async function ProjectDetailPage({ params, searchParams }: { para
                   {/* Status of the task */}
                   <div className="flex items-center gap-2">
                     <Label className="text-sm font-medium w-20">Status</Label>
-                    <DropdownMenu >
-                    <DropdownMenuTrigger className="bg-transparent border rounded-lg px-2 py-1 text-sm w-32">
-                        {task.status === Status.PENDING ? "PENDING" : task.status === Status.PROGRESS ? "PROGRESS" : task.status === Status.COMPLETED ? "COMPLETED" : task.status === Status.CANCELLED ? "CANCELLED" : task.status === Status.ON_HOLD ? "ON HOLD" : "FEEDBACK"}    
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-40">
-                        {Object.values(Status).map((status) => (
-                          <DropdownMenuItem key={status}>
-                            {status}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <StatusComponent isCreate={false} status={task.status} />
                   </div>
                   {/* Priority of the task */}
                   <div className="flex items-center gap-2">
                     <Label className="text-sm font-medium w-20">Priority</Label>
-                    <DropdownMenu >
-                    <DropdownMenuTrigger className="bg-transparent border rounded-lg px-2 py-1 text-sm w-32">
-                        { task.priorityStatus === Priority.LOW && "LOW" || task.priorityStatus === Priority.MEDIUM && "MEDIUM" || task.priorityStatus === Priority.HIGH && "HIGH" || task.priorityStatus === Priority.URGENT && "URGENT" || "LOW"}
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-40">
-                        {Object.values(Priority).map((priority) => (
-                          <DropdownMenuItem key={priority.valueOf()}>
-                            {priority}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <PriorityComponent isCreate={false} priority={task.priorityStatus} />
                   </div>
                   {/* Date of the task */}
                   <div className="flex items-center gap-2">

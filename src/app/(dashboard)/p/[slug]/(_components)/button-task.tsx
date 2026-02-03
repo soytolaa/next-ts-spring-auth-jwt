@@ -9,7 +9,7 @@ export function ButtonTask({ projectId, users }: { projectId: number, users: Use
     return(
         <>
             <Button onClick={() => setIsOpen(true)}><Plus className="w-4 h-4" /> Create Task</Button>
-            <TaskPop isOpen={isOpen} setIsOpen={setIsOpen} projectId={projectId} users={users} />
+            <TaskPop isOpen={isOpen} setIsOpen={setIsOpen} projectId={projectId} users={users} isCreate={true} />
         </>
     )
 }

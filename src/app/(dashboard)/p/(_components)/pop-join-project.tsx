@@ -2,28 +2,34 @@ import { AlertDialog, AlertDialogContent, AlertDialogDescription, AlertDialogFoo
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import * as React from "react";
+import { useState, useEffect, FormEvent } from "react";
+import { toast } from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 export function PopJoinProject({ isOpen, setIsOpen, handleJoinProject }: { isOpen: boolean, setIsOpen: (open: boolean) => void, handleJoinProject: (code: string) => Promise<void> }) {
     const [code, setCode] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (!code || code.length !== 36) return;
         setIsLoading(true);
         try {
-            await handleJoinProject(code);
-            setCode(""); // Reset code on success
+            const formData = new FormData(e.currentTarget);
+            const code = formData.get("code") as string;
+            await handleJoinProject(code as string);
+            toast.success("Project joined successfully");
+            setIsOpen(false);
+            setCode("");
         } catch (error) {
-            // Error handling is done in parent component
+            toast.error(error instanceof Error ? error.message : "Failed to join project");
         } finally {
             setIsLoading(false);
         }
     };
     
     // Reset form when dialog closes
-    React.useEffect(() => {
+    useEffect(() => {
         if (!isOpen) {
             setCode("");
             setIsLoading(false);
@@ -33,6 +39,7 @@ export function PopJoinProject({ isOpen, setIsOpen, handleJoinProject }: { isOpe
     return (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
             <AlertDialogContent>
+                <form onSubmit={handleSubmit}>     
                 <AlertDialogHeader>
                     <AlertDialogTitle>Join Project</AlertDialogTitle>
                     <AlertDialogDescription>
@@ -47,19 +54,19 @@ export function PopJoinProject({ isOpen, setIsOpen, handleJoinProject }: { isOpe
                             id="code" 
                             name="code" 
                             type="text"  
-                            required 
+                            required
+                            disabled={isLoading}
                             maxLength={36} 
                             minLength={36} 
                             placeholder="#Code" 
                             value={code} 
                             onChange={(e) => setCode(e.target.value)}
-                            disabled={isLoading}
                         /> 
                     </div>
                 </div>
                 <AlertDialogFooter className="mt-4 max-w-md">
                     <Button 
-                        type="button" 
+                        type="reset" 
                         variant="outline" 
                         onClick={() => setIsOpen(false)}
                         disabled={isLoading}
@@ -67,14 +74,21 @@ export function PopJoinProject({ isOpen, setIsOpen, handleJoinProject }: { isOpe
                         Cancel
                     </Button>
                     <Button 
-                        type="button" 
-                        className="w-28" 
-                        onClick={handleSubmit} 
+                        type="submit" 
+                        className="w-28"
                         disabled={isLoading || !code || code.length !== 36}
                     >
-                        {isLoading ? "Joining..." : "Join"}
-                    </Button>
-                </AlertDialogFooter>
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Joining...
+                            </>
+                        ) : (
+                            "Join"
+                        )}
+                        </Button>
+                    </AlertDialogFooter>
+                </form>
             </AlertDialogContent>
         </AlertDialog>
     )

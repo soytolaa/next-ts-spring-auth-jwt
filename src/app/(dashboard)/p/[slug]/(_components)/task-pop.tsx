@@ -6,60 +6,110 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { FormEvent } from "react";
-import { DropdownMenu, DropdownMenuItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";    
 import { DatePickerRange } from "@/components/date-picker-range";
 import { User } from "@/types/auth";
-import { createTaskAction } from "@/action/taskAction";
+import { createTaskAction, updateTaskAction } from "@/action/taskAction";
 import { Priority, Status } from "@/types/enums/Status";
 import { LocalDate } from "@js-joda/core";   
-import { TaskRequest } from "@/types/task";
+import { TaskRequest, TaskResponse } from "@/types/task";
 import { toast } from "react-hot-toast";
-export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boolean, setIsOpen: (open: boolean) => void, projectId: number, users: User[] }) {
+import StatusComponent from "../../(_components)/status";
+import PriorityComponent from "../../(_components)/priority";
+import UserComponent from "../../(_components)/user";
+export function TaskPop({ isOpen, setIsOpen, projectId, users, isCreate, task }: { isOpen: boolean, setIsOpen: (open: boolean) => void, projectId: number, users: User[], isCreate: boolean, task?: TaskResponse }) {
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedStatus, setSelectedStatus] = useState<Status>(Status.PENDING);
-    const [selectedPriority, setSelectedPriority] = useState<Priority>(Priority.LOW);
-    const [selectedAssignTo, setSelectedAssignTo] = useState<number | null>(users.length > 0 ? users[0].userId : null);
+    const [selectedStatus, setSelectedStatus] = useState<Status>(task?.status || Status.PENDING);
+    const [selectedPriority, setSelectedPriority] = useState<Priority>(task?.priorityStatus || Priority.LOW);
+    const [selectedAssignTo, setSelectedAssignTo] = useState<number[]>(task?.assignees || []);
+    const [name, setName] = useState<string>(task?.name || "");
+    const [description, setDescription] = useState<string>(task?.description || "");
     const [dateRange, setDateRange] = React.useState<{
       from?: LocalDate
       to?: LocalDate
-    }>({})
+    }>({
+      from: task?.assignedAt,
+      to: task?.dueAt
+    })
 
-    // Reset form when dialog closes
+    // Populate form when task is provided (edit mode) or reset when dialog opens/closes
     useEffect(() => {
-        if (!isOpen) {
+        if (isOpen) {
+            if (task && !isCreate) {
+                // Edit mode - populate with task data
+                setSelectedStatus(task.status);
+                setSelectedPriority(task.priorityStatus);
+                // Handle assignees - could be User[] or number[] depending on API response
+                // Check if assignees are User objects (have userId property) or just numbers
+                let assigneeIds: number[] = [];
+                if (Array.isArray(task.assignees) && task.assignees.length > 0) {
+                    const firstAssignee = task.assignees[0];
+                    if (typeof firstAssignee === 'object' && firstAssignee !== null && 'userId' in firstAssignee) {
+                        // It's an array of User objects
+                        assigneeIds = (task.assignees as any[]).map((a: any) => typeof a === 'object' && a.userId ? a.userId : a);
+                    } else if (typeof firstAssignee === 'number') {
+                        // It's already an array of numbers
+                        assigneeIds = task.assignees as number[];
+                    }
+                }
+                setSelectedAssignTo(assigneeIds);
+                setName(task.name);
+                setDescription(task.description);
+                setDateRange({
+                    from: task.assignedAt,
+                    to: task.dueAt
+                });
+            } else {
+                // Create mode - reset to defaults
+                setSelectedStatus(Status.PENDING);
+                setSelectedPriority(Priority.LOW);
+                setSelectedAssignTo([]);
+                setName("");
+                setDescription("");
+                setDateRange({});
+            }
+        } else {
+            // Reset when dialog closes
             setSelectedStatus(Status.PENDING);
             setSelectedPriority(Priority.LOW);
-            setSelectedAssignTo(users.length > 0 ? users[0].userId : null);
+            setSelectedAssignTo([]);
+            setName("");
+            setDescription("");
             setDateRange({});
             if (formRef.current) {
                 formRef.current.reset();
             }
         }
-    }, [isOpen, users]);
+    }, [isOpen, task, isCreate]);
 
-    const handleCreateTask = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const formData = new FormData(e.currentTarget);
             const taskRequest: TaskRequest = {
-                name: formData.get("name") as string,
-                description: formData.get("description") as string,
+                name: name,
+                description: description,
                 status: selectedStatus,
                 priorityStatus: selectedPriority,
                 projectId: projectId,
-                assignees: selectedAssignTo ? [users.find((user) => user.userId === selectedAssignTo)?.userId as number] : [],
-                assignedAt: formData.get("assignedAt") as string,
-                dueAt: formData.get("dueAt") as string,
+                assignees: selectedAssignTo,
+                assignedAt: dateRange.from?.toString(),
+                dueAt: dateRange.to?.toString(),
             }
-            await createTaskAction(taskRequest);
+            
+            if (isCreate) {
+                await createTaskAction(taskRequest);
+                toast.success("Task created successfully");
+            } else if (task) {
+                await updateTaskAction(task.id, taskRequest);
+                toast.success("Task updated successfully");
+            }
+            
             setIsOpen(false);
-            toast.success("Task created successfully");
         } catch (error) {
-            console.error("Error creating task:", error);
+            console.error(`Error ${isCreate ? 'creating' : 'updating'} task:`, error);
+            toast.error(`Failed to ${isCreate ? 'create' : 'update'} task`);
         } finally {
             setIsLoading(false);
         }
@@ -67,11 +117,13 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boole
   return (
       <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent className="max-w-md">
-        <form ref={formRef} onSubmit={handleCreateTask}>
+        <form ref={formRef} onSubmit={handleSubmit}>
           <AlertDialogHeader>
-            <AlertDialogTitle>New Task</AlertDialogTitle>
+            <AlertDialogTitle>{isCreate ? "New Task" : "Edit Task"}</AlertDialogTitle>
             <AlertDialogDescription>
-              Create a new task to organize your tasks and collaborate with your team.
+              {isCreate 
+                ? "Create a new task to organize your tasks and collaborate with your team."
+                : "Update the task details and collaborate with your team."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           
@@ -87,72 +139,42 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boole
                 required
                 disabled={isLoading}
                 className="border-gray-300"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             {/* Task Assign to */}
             <div className="flex items-center gap-2">
-                <Label className="text-sm font-medium w-20">Assign to</Label>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Badge variant="outline" className="bg-transparent font-normal border rounded-lg text-sm px-2 py-1 w-32 text-center justify-center items-center cursor-pointer">
-                            {users.find((user) => user.userId === selectedAssignTo)?.userName || "Select user"}
-                        </Badge>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        {users.map((user) => (
-                            <DropdownMenuItem 
-                                key={user.userId}
-                                onClick={() => setSelectedAssignTo(user.userId)}
-                            >
-                                {user.userName}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <input type="hidden" name="assignTo" value={selectedAssignTo || ""} />
+                <Label className="text-sm font-medium w-20">Assign to</Label> 
+                <div>
+                <UserComponent 
+                    key={task?.id || 'create'} 
+                    isCreate={isCreate} 
+                    users={users} 
+                    selectedAssignTo={selectedAssignTo} 
+                    setSelectedAssignTo={setSelectedAssignTo}  
+                /> 
+                </div>
+                <input type="hidden" name="assignTo" value={selectedAssignTo.join(",") || ""} />
             </div>
             {/* Task Status */}
             <div className="flex items-center gap-2">
                 <Label className="text-sm font-medium w-20">Status</Label>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Badge variant="outline" className="bg-transparent font-normal border rounded-lg text-sm px-2 py-1 w-32 text-center justify-center items-center cursor-pointer">
-                            {selectedStatus}
-                        </Badge>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        {Object.values(Status).map((status) => (
-                            <DropdownMenuItem 
-                                key={status}
-                                onClick={() => setSelectedStatus(status)}
-                            >
-                                {status}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <StatusComponent 
+                    isCreate={isCreate} 
+                    status={selectedStatus}
+                    onStatusChange={setSelectedStatus}
+                />
                 <input type="hidden" name="status" value={selectedStatus} />
             </div>
             {/* Task Priority */}
             <div className="flex items-center gap-2">
                 <Label className="text-sm font-medium w-20">Priority</Label>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Badge variant="outline" className="bg-transparent font-normal border rounded-lg text-sm px-2 py-1 w-32 text-center justify-center items-center cursor-pointer">
-                            {selectedPriority}
-                        </Badge>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        {Object.values(Priority).map((priority) => (
-                            <DropdownMenuItem 
-                                key={priority}
-                                onClick={() => setSelectedPriority(priority)}
-                            >
-                                {priority}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <PriorityComponent 
+                    isCreate={isCreate} 
+                    priority={selectedPriority}
+                    onPriorityChange={setSelectedPriority}
+                />
                 <input type="hidden" name="priority" value={selectedPriority} />
             </div>
             {/* Task Due Date */}
@@ -185,6 +207,8 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boole
                 rows={4}
                 disabled={isLoading}
                 className="border-gray-300 h-[200px] max-h-[250px]"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>  
           </div>
@@ -205,10 +229,10 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users }: { isOpen: boole
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
+                  {isCreate ? "Creating..." : "Updating..."}
                 </>
               ) : (
-                "Create"
+                isCreate ? "Create" : "Update"
               )}
             </Button>
           </AlertDialogFooter>

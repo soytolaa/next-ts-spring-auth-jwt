@@ -6,7 +6,6 @@ import PopCreate from "./pop-create";
 import { useState } from "react";
 import { createProjectAction, joinProjectAction } from "@/action/projectAction";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { DropdownMenu, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
 import { DropdownMenuGroup } from "@/components/ui/dropdown-menu";
@@ -16,7 +15,6 @@ import { PopJoinProject } from "./pop-join-project";
 export default function ButtonCreate() {
     const [isOpen, setIsOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter();
     const [isOpenJoinProject, setIsOpenJoinProject] = useState(false);
     const handleCreateProject = async (name: string, description: string) => {
         setIsLoading(true);

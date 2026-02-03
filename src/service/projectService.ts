@@ -12,9 +12,6 @@ export async function createProjectService(data: ProjectRequest): Promise<ApiRes
     body: JSON.stringify({ ...data }),
   });
   revalidateTag("projects");
-  if (response.status !== 201) {
-    throw new Error(`Error: ${response.status} ${response.statusText}`);
-  }
   return response.json() as Promise<ApiResponse<ProjectResponse>>;
 }
 
@@ -24,9 +21,6 @@ export async function getProjectsService(): Promise<ApiResponse<ProjectResponse[
     method: "GET",
     headers: headers,
   });
-  if (response.status !== 200) {
-    throw new Error(`Error: ${response.status} ${response.statusText}`);
-  }
   return response.json() as Promise<ApiResponse<ProjectResponse[]>>;
 }
 
@@ -36,9 +30,6 @@ export async function getUserInProjectService(id: number): Promise<ApiResponse<U
     method: "GET",
     headers: headers,
   });
-  if (response.status !== 200) {
-    throw new Error(`Error: ${response.status} ${response.statusText}`);
-  }
   return response.json() as Promise<ApiResponse<User[]>>;
 }
 
@@ -48,8 +39,5 @@ export async function joinProjectService(code: string): Promise<ApiResponse<bool
     method: "POST",
     headers: headers,
   });
-  if (response.status !== 200) {
-    throw new Error(`Error: ${response.status} ${response.statusText}`);
-  }
   return response.json() as Promise<ApiResponse<boolean>>;
 }

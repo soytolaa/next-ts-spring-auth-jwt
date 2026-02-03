@@ -23,6 +23,7 @@ export const getUserInProjectAction = async (id: number): Promise<ApiResponse<Us
 
 export const joinProjectAction = async (code: string): Promise<ApiResponse<boolean>> => {
   const response = await joinProjectService(code);
+  console.log("response", response);
   revalidateTag("project")
   return response;
 }

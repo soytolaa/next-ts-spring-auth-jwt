@@ -21,9 +21,6 @@ export async function createTaskService(data: TaskRequest): Promise<ApiResponse<
     headers: headers,
     body: JSON.stringify(apiPayload),
   });
-  if (response.status !== 201) {
-    throw new Error(`Error: ${response.status} ${response.statusText}`);
-  }
   return response.json() as Promise<ApiResponse<TaskResponse>>;
 }
 
@@ -33,8 +30,27 @@ export async function getTasksByProjectIdService(id :number): Promise<ApiRespons
     method: "GET",
     headers: headers,
   });
-  if (response.status !== 200) {
-    throw new Error(`Error: ${response.status} ${response.statusText}`);
-  }
   return response.json() as Promise<ApiResponse<TaskResponse[]>>;
+}
+
+export async function updateTaskService(id: number, data: TaskRequest): Promise<ApiResponse<TaskResponse>> {
+  const { headers } = await headerToken(false);
+
+  const apiPayload = {
+    name: data.name,
+    description: data.description,
+    status: data.status,
+    priorityStatus: data.priorityStatus,
+    projectId: data.projectId,
+    assignees: data.assignees,
+    assignedAt: data.assignedAt,  
+    dueAt: data.dueAt,  
+  };
+  
+  const response = await fetch(`${process.env.API_URL}/tasks/${id}`, {
+    method: "PUT",
+    headers: headers,
+    body: JSON.stringify(apiPayload),
+  });
+  return response.json() as Promise<ApiResponse<TaskResponse>>;
 }

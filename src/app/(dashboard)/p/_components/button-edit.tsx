@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MoreVertical, Pencil, Trash } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
-import { TaskPop } from "../[slug]/(_components)/task-pop";
+import { TaskPop } from "../[slug]/_components/task-pop";
 import { User } from "@/types/auth";
 import { TaskResponse } from "@/types/task";
 import YNAlert from "@/components/yn-alert";

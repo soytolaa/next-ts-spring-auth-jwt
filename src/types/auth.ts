@@ -3,6 +3,7 @@ export type User = {
   userName: string;
   email: string;
   type: string;
+  role: string;
   isVerified: boolean;
   isActive: boolean;
   createdAt: string;

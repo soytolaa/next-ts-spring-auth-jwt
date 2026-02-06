@@ -3,7 +3,7 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { TaskRequest, TaskResponse } from "@/types/task";   
 
 export async function createTaskService(data: TaskRequest): Promise<ApiResponse<TaskResponse>> {
-  const { headers } = await headerToken(false);
+  const { headers } = await headerToken(true); 
 
   const apiPayload = {
     name: data.name,
@@ -25,7 +25,7 @@ export async function createTaskService(data: TaskRequest): Promise<ApiResponse<
 }
 
 export async function getTasksByProjectIdService(id :number): Promise<ApiResponse<TaskResponse[]>> {
-  const { headers } = await headerToken(false);
+  const { headers } = await headerToken(true);
   const response = await fetch(`${process.env.API_URL}/tasks/project/${id}`, {
     method: "GET",
     headers: headers,
@@ -34,7 +34,7 @@ export async function getTasksByProjectIdService(id :number): Promise<ApiRespons
 }
 
 export async function updateTaskService(id: number, data: TaskRequest): Promise<ApiResponse<TaskResponse>> {
-  const { headers } = await headerToken(false);
+  const { headers } = await headerToken(true);
 
   const apiPayload = {
     name: data.name,

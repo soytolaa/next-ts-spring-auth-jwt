@@ -39,7 +39,7 @@ export function EmptyProject({ className }: { className?: string }) {
         <Button variant="outline" onClick={() => setIsOpenJoin(true)} className="cursor-pointer">Join Project</Button>
         <Button onClick={() => setIsOpen(true)} className="cursor-pointer"> Create Project</Button>
       </EmptyContent>
-      <PopCreate isOpen={isOpen} setIsOpen={setIsOpen} handleCreateProject={handleCreateProject} />
+      <PopCreate isOpen={isOpen} isCreate={true} setIsOpen={setIsOpen} handleCreateProject={handleCreateProject} />
       <PopJoinProject isOpen={isOpenJoin} setIsOpen={setIsOpenJoin} handleJoinProject={handleJoinProject}/>
     </Empty>
   )

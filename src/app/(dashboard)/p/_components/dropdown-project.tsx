@@ -6,7 +6,7 @@ import { MoreVertical, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 import YNAlert from "@/components/yn-alert";
 import PopCreateProject from "./pop-create";
-import { updateProjectAction } from "@/action/projectAction";
+import { activeDeactiveProjectAction, updateProjectAction } from "@/action/projectAction"; 
 import { toast } from "react-hot-toast";
 
 export default function DropdownOptionEditAndDeleteProject({ projectId, project }: { projectId: number, project: ProjectResponse }) {
@@ -24,9 +24,16 @@ export default function DropdownOptionEditAndDeleteProject({ projectId, project 
         }
     }
     
-    const handleDelete = async () => {
-        console.log("Delete project", project);
-        // TODO: Implement delete functionality
+    const handleDisableProject = async () => {
+        console.log("Disable project", project);
+        try {
+            await activeDeactiveProjectAction(project.id,false);
+            toast.success("Project deleted successfully");
+            setIsOpenDelete(false);
+        } catch (error) {
+            toast.error(error instanceof Error ? error.message : "Failed to delete project");
+            throw error; 
+        }
     }
     
     return (
@@ -50,7 +57,7 @@ export default function DropdownOptionEditAndDeleteProject({ projectId, project 
             isCreate={false} 
             project={project}
         />
-        <YNAlert isOpen={isOpenDelete} setIsOpen={setIsOpenDelete} handleConfirm={handleDelete} title="# Delete Project" description="Are you sure you want to delete this project?" />
+        <YNAlert isOpen={isOpenDelete} setIsOpen={setIsOpenDelete} handleConfirm={handleDisableProject} title="# Delete Project" description="Are you sure you want to delete this project?" />
         </>
     )
 }

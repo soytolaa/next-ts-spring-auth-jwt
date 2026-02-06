@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${mavenPro.className} antialiased`}>
         <ThemeProvider>
-          <NextTopLoader color="black" height={4} showSpinner={false} /> 
+          <NextTopLoader color="white"  height={4} showSpinner={false} /> 
           <Toaster position="top-center" />
           {children}
         </ThemeProvider>

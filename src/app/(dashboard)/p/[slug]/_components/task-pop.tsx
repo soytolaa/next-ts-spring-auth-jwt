@@ -9,15 +9,15 @@ import { FormEvent } from "react";
 import { Textarea } from "@/components/ui/textarea";    
 import { DatePickerRange } from "@/components/date-picker-range";
 import { User } from "@/types/auth";
-import { createTaskAction, updateTaskAction } from "@/action/taskAction";
+import { updateTaskAction } from "@/action/taskAction";
 import { Priority, Status } from "@/types/enums/Status";
 import { LocalDate } from "@js-joda/core";   
 import { TaskRequest, TaskResponse } from "@/types/task";
+import StatusComponent from "../../_components/status";
+import PriorityComponent from "../../_components/priority";
+import UserComponent from "../../_components/user";
 import { toast } from "react-hot-toast";
-import StatusComponent from "../../(_components)/status";
-import PriorityComponent from "../../(_components)/priority";
-import UserComponent from "../../(_components)/user";
-export function TaskPop({ isOpen, setIsOpen, projectId, users, isCreate, task }: { isOpen: boolean, setIsOpen: (open: boolean) => void, projectId: number, users: User[], isCreate: boolean, task?: TaskResponse }) {
+export function TaskPop({ isOpen, setIsOpen, projectId, users, isCreate, task, handleCreateTask }: { isOpen: boolean, setIsOpen: (open: boolean) => void, projectId: number, users: User[], isCreate: boolean, task?: TaskResponse, handleCreateTask?: (taskRequest: { name: string; description: string; status: Status; priorityStatus: Priority; assignees: number[]; assignedAt?: string; dueAt?: string }) => void }) {
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<Status>(task?.status || Status.PENDING);
@@ -98,9 +98,16 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users, isCreate, task }:
                 dueAt: dateRange.to?.toString(),
             }
             
-            if (isCreate) {
-                await createTaskAction(taskRequest);
-                toast.success("Task created successfully");
+            if (isCreate && handleCreateTask) {
+                await handleCreateTask({
+                    name: taskRequest.name,
+                    description: taskRequest.description,
+                    status: taskRequest.status,
+                    priorityStatus: taskRequest.priorityStatus,
+                    assignees: taskRequest.assignees,
+                    assignedAt: taskRequest.assignedAt,
+                    dueAt: taskRequest.dueAt,
+                });
             } else if (task) {
                 await updateTaskAction(task.id, taskRequest);
                 toast.success("Task updated successfully");
@@ -109,7 +116,6 @@ export function TaskPop({ isOpen, setIsOpen, projectId, users, isCreate, task }:
             setIsOpen(false);
         } catch (error) {
             console.error(`Error ${isCreate ? 'creating' : 'updating'} task:`, error);
-            toast.error(`Failed to ${isCreate ? 'create' : 'update'} task`);
         } finally {
             setIsLoading(false);
         }

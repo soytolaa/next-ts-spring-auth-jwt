@@ -9,6 +9,8 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar"
 import { SidebarNavItem } from "@/components/sidebar-nav-item"
+import Image from "next/image"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 // Menu items.
 const items = [
   {
@@ -56,8 +58,14 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
+        <div className="flex flex-col gap-4 h-full justify-between">
         <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center gap-2">{"Logo"}</SidebarGroupLabel>
+          <SidebarGroupLabel className="flex items-center gap-2">
+            <Avatar className="w-10 h-10">
+              <AvatarImage src="/assets/images/logo.svg" alt="Logo" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar> {/* Logo */}
+            </SidebarGroupLabel> {/* Logo */}
           <SidebarGroupLabel>Menu Items</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -71,6 +79,8 @@ export function AppSidebar() {
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup className="mb-20">
           <SidebarGroupLabel>General</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -85,7 +95,8 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-      </SidebarContent>
+      </div>
+      </SidebarContent> 
     </Sidebar>
   )
 }

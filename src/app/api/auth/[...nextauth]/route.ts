@@ -1,13 +1,11 @@
 // app/api/auth/[...nextauth]/route.ts
 
-import { loginAction, registerAction } from "@/action/authAction";
+import { loginAction, oauthLoginAction, registerAction } from "@/action/authAction";
 import { Users } from "@/types/auth";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
-import { Type } from "@/types/auth";
-import { User } from "next-auth";
 export const authOptions: AuthOptions = {
   providers: [
     // google provider
@@ -24,30 +22,42 @@ export const authOptions: AuthOptions = {
         },
       },
       allowDangerousEmailAccountLinking: true, // allow user to link their email account to google account
-      async profile(profile, account): Promise<User> {
+      async profile(profile, account): Promise<any> {
         // profile function to get user profile
         //profile function is called when user sign in with google
         //account is the account object
         try {
-          const user = await registerAction({
-            email: profile.email,
-            password: `${"coocon"}${profile.sub}`,
-            userName: profile.name,
-            confirmPassword: `${"coocon"}${profile.sub}`,
-            type: Type.google,
-          });
-          if (user.errorMessage) {
-            throw new Error(user.errorMessage);
+          // Ensure profile has required fields
+          if (!profile?.email) {
+            throw new Error("Email is required from Google profile");
           }
+
+          const user = await oauthLoginAction({
+            provider: "GOOGLE",
+            email: profile.email,
+            name: profile.name || profile.given_name || "",
+            oauthId: profile.sub,
+          });
+          
+          if (user.errorMessage) {
+            throw new Error(user.errorMessage); // if error message is not null then throw error
+          }
+
+          const userPayload = user.payload as any;
+          
+          // Return a properly formatted profile object that NextAuth expects
+          // Must include id and email at minimum
           return {
-            id: user.payload.userId.toString(),
-            email: user.payload.email,
-            name: user.payload.userName,
-            accessToken: account?.id_token || "",
+            id: userPayload?.userId?.toString() || profile.sub,
+            email: profile.email,
+            name: profile.name || userPayload?.userName || "",
+            image: profile.picture,
+            accessToken: userPayload?.accessToken,
+            ...userPayload, // Include all other user data
           };
         } catch (error) {
           console.error("Google auth error:", error);
-          throw error;
+          throw error; // if error is not null then throw error
         }
       },
     }),
@@ -102,21 +112,33 @@ export const authOptions: AuthOptions = {
         //profile function is called when user sign in with github
         //account is the account object
         try {
-          const user = await registerAction({
-            email: profile.email,
-            password: `${"coocon"}${profile.id}`,
-            userName: profile.name,
-            confirmPassword: `${"coocon"}${profile.id}`,
-            type: Type.github,
+          // Ensure profile has required fields
+          if (!profile?.email && !profile?.login) {
+            throw new Error("Email or login is required from GitHub profile");
+          }
+
+          const user = await oauthLoginAction({
+            provider: "GITHUB",
+            email: profile.email || `${profile.login}@github.com`,
+            name: profile.name || profile.login || "",
+            oauthId: profile.id?.toString() || "",
           });
+          
           if (user.errorMessage) {
             throw new Error(user.errorMessage);
           }
+
+          const userPayload = user.payload as any;
+          
+          // Return a properly formatted profile object that NextAuth expects
+          // Must include id and email at minimum
           return {
-            id: user.payload.userId.toString(),
-            email: user.payload.email,
-            name: user.payload.userName,
-            accessToken: account.access_token || "",
+            id: userPayload?.userId?.toString() || profile.id?.toString(),
+            email: profile.email || `${profile.login}@github.com`,
+            name: profile.name || profile.login || "",
+            image: profile.avatar_url,
+            accessToken: userPayload?.accessToken,
+            ...userPayload, // Include all other user data
           };
         } catch (error) {
           console.error("Github auth error:", error);
@@ -134,18 +156,20 @@ export const authOptions: AuthOptions = {
     // callbacks is used to customize the session and jwt
     async jwt({ token, user, account }) {
       // jwt callback to get user token
-      //jwt callback is called when user sign in with credentials
+      //jwt callback is called when user sign in with credentials or OAuth
       //token is the token object
       //user is the user object
       //account is the account object
-      if (account) {
-        // if account is not null then set the email and access token
-        token.email = user.email;
-        token.accessToken = (account as any).id_token;
-      }
       if (user) {
-        token.email = user.email;
-        token.accessToken = (user as any).accessToken;
+        // Set email from user object (works for both credentials and OAuth)
+        token.email = user.email || (user as any).email;
+        // For OAuth, accessToken comes from the user object returned by profile function
+        // For credentials, accessToken comes from the user object returned by authorize function
+        token.accessToken = (user as any).accessToken || (account as any)?.id_token;
+      }
+      if (account && !token.accessToken) {
+        // Fallback: if no accessToken from user, try to get from account
+        token.accessToken = (account as any).id_token;
       }
       return token;
     },

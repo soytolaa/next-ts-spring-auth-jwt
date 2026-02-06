@@ -15,6 +15,7 @@ export async function headerToken(requireAuth = true) {
     // If session exists and has access token, add it to headers
     if (session?.user?.accessToken) {
       headers.Authorization = `Bearer ${session.user.accessToken}`;
+      console.log("headers", headers);
     }
   }
 
